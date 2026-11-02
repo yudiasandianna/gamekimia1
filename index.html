@@ -118,30 +118,32 @@
       box-shadow: 0 2px 0 #cbd5e1;
     }
 
-    /* Interactive Answer Cards */
+    /* Interactive Answer Cards - Mobile First & Zero Scroll */
     .answer-card {
-      border: 3px solid #e2e8f0;
-      border-radius: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
       background: white;
       font-weight: 800;
-      transition: all 0.12s ease;
-      box-shadow: 0 4px 0 #cbd5e1;
+      transition: all 0.1s ease;
+      box-shadow: 0 2px 0 #cbd5e1;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      min-height: 34px;
+      padding: 5px 8px;
     }
     .answer-card:hover:not(:disabled) {
       border-color: #93c5fd;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 #cbd5e1;
     }
     .answer-card:active:not(:disabled) {
-      transform: translateY(3px);
+      transform: translateY(2px);
       box-shadow: 0 1px 0 #cbd5e1;
     }
     .answer-card:disabled {
-      opacity: 0.65;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
@@ -150,44 +152,44 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       background: #f8fafc;
-      border: 2px solid #94a3b8;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border: 1.5px solid #94a3b8;
+      border-radius: 6px;
+      font-size: 0.72rem;
       font-weight: 900;
       color: #334155;
-      box-shadow: 0 2px 0 #94a3b8;
+      box-shadow: 0 1px 0 #94a3b8;
     }
 
     /* Rope & Tug Arena */
     .rope-track {
-      height: 64px;
+      height: 44px;
       position: relative;
       background: linear-gradient(180deg, #fed7aa 0%, #fdba74 100%);
-      border-radius: 32px;
-      border: 4px solid #ffffff;
-      box-shadow: inset 0 4px 10px rgba(124, 45, 18, 0.25), 0 8px 18px rgba(0,0,0,0.1);
+      border-radius: 22px;
+      border: 3px solid #ffffff;
+      box-shadow: inset 0 3px 8px rgba(124, 45, 18, 0.2), 0 4px 10px rgba(0,0,0,0.08);
       overflow: visible;
     }
     .rope-braid {
       position: absolute;
-      left: 20px;
-      right: 20px;
+      left: 15px;
+      right: 15px;
       top: 50%;
-      height: 14px;
+      height: 10px;
       transform: translateY(-50%);
-      background: repeating-linear-gradient(45deg, #b45309 0px, #b45309 10px, #d97706 10px, #d97706 20px);
-      border-radius: 7px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      background: repeating-linear-gradient(45deg, #b45309 0px, #b45309 8px, #d97706 8px, #d97706 16px);
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .rope-center-mark {
       position: absolute;
       left: 50%;
       top: 0;
       bottom: 0;
-      width: 4px;
+      width: 3px;
       background: #ffffff;
       transform: translateX(-50%);
       z-index: 5;
@@ -197,10 +199,10 @@
       top: -12px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 44px;
+      font-size: 32px;
       transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       z-index: 10;
-      filter: drop-shadow(0 6px 6px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 4px 5px rgba(0,0,0,0.25));
     }
 
     /* Screen Shake Animation */
@@ -371,27 +373,27 @@
        ========================================== -->
   <section id="screenGame" class="screen flex-col">
     <!-- Top Header Bar -->
-    <header class="h-14 sm:h-16 px-3 sm:px-6 bg-white/95 border-b-2 border-slate-200 flex items-center justify-between z-20 shadow-sm flex-shrink-0">
-      <div class="flex items-center gap-2 sm:gap-3">
-        <span class="text-2xl sm:text-3xl">⚗️</span>
+    <header class="h-11 sm:h-13 px-2 sm:px-4 bg-white/95 border-b border-slate-200 flex items-center justify-between z-20 shadow-sm flex-shrink-0">
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <span class="text-xl sm:text-2xl">⚗️</span>
         <div>
-          <span class="font-brand text-lg sm:text-2xl text-sky-900 leading-none block">TARIK TAMBANG KIMIA</span>
-          <span id="labelQuestionProgress" class="text-xs font-extrabold text-slate-500">Soal 1 / 50</span>
+          <span class="font-brand text-sm sm:text-lg text-sky-900 leading-none block">TARIK TAMBANG KIMIA</span>
+          <span id="labelQuestionProgress" class="text-[10px] sm:text-xs font-extrabold text-slate-500">Soal 1 / 50</span>
         </div>
       </div>
 
       <!-- Quick Audio & Accessibility Toolbar -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1 sm:gap-2">
         <button id="btnTTS" onclick="readQuestionTTS()" title="Dengarkan Soal (Text to Speech)" 
-          class="px-2.5 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 transition">
+          class="px-2 py-1 bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold text-[11px] sm:text-xs rounded-lg flex items-center gap-1 transition">
           <span>🔊</span> <span class="hidden sm:inline">Bacakan</span>
         </button>
         <button id="btnMusic" onclick="toggleBackgroundMusic()" title="Nyalakan/Matikan Musik Belajar"
-          class="px-2.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 font-extrabold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 transition">
+          class="px-2 py-1 bg-amber-100 hover:bg-amber-200 text-amber-800 font-extrabold text-[11px] sm:text-xs rounded-lg flex items-center gap-1 transition">
           <span id="musicIcon">🎵</span> <span id="musicLabel" class="hidden sm:inline">Musik: OFF</span>
         </button>
         <button onclick="openModal('helpModal')" title="Petunjuk Bermain"
-          class="w-8 h-8 rounded-xl bg-slate-200 hover:bg-slate-300 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+          class="w-7 h-7 rounded-lg bg-slate-200 hover:bg-slate-300 font-extrabold text-slate-700 flex items-center justify-center text-xs">
           ?
         </button>
       </div>
@@ -401,55 +403,55 @@
     <main class="flex-1 flex flex-col min-h-0 relative">
       
       <!-- Central Question & Feedback Panel -->
-      <div class="p-2 sm:p-3 flex-shrink-0 z-10">
-        <div class="glass-panel mx-auto max-w-4xl p-3 sm:p-4 text-center">
-          <div class="flex items-center justify-between text-xs font-black mb-1">
-            <span id="badgeQuestionLevel" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+      <div class="px-2 py-1 sm:py-1.5 flex-shrink-0 z-10">
+        <div class="glass-panel mx-auto max-w-4xl p-2 sm:p-2.5 text-center">
+          <div class="flex items-center justify-between text-[11px] sm:text-xs font-black mb-0.5">
+            <span id="badgeQuestionLevel" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
               LEVEL 1: LOTS • PILIHAN GANDA
             </span>
-            <span id="labelTimer" class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 font-mono">
+            <span id="labelTimer" class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono">
               ⏱ 00.0s
             </span>
           </div>
 
-          <h2 id="textQuestionPrompt" class="text-sm sm:text-lg md:text-xl font-extrabold text-slate-800 my-1 leading-tight">
+          <h2 id="textQuestionPrompt" class="text-xs sm:text-sm md:text-base font-extrabold text-slate-800 my-0.5 leading-snug">
             Memuat pertanyaan...
           </h2>
-          <p id="textQuestionContext" class="text-xs sm:text-sm text-slate-500 font-bold min-h-4"></p>
+          <p id="textQuestionContext" class="text-[10px] sm:text-xs text-slate-500 font-bold min-h-3"></p>
 
           <!-- Dynamic Instant Feedback Banner -->
-          <div id="bannerFeedback" class="text-xs sm:text-sm font-black min-h-6 transition-all duration-200 mt-1"></div>
+          <div id="bannerFeedback" class="text-[11px] sm:text-xs font-black min-h-4 transition-all duration-150"></div>
         </div>
       </div>
 
       <!-- Split Screen Player Control Area -->
-      <div class="flex-1 grid grid-cols-2 gap-2 px-2 sm:px-4 min-h-0 pb-1">
+      <div class="flex-1 grid grid-cols-2 gap-1.5 sm:gap-3 px-1.5 sm:px-3 min-h-0 pb-1">
         
         <!-- PLAYER 1 (BLUE SIDE - LEFT) -->
-        <div id="panelP1" class="rounded-3xl border-3 border-blue-300 bg-gradient-to-b from-blue-50/90 to-blue-100/90 p-2 sm:p-4 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
+        <div id="panelP1" class="rounded-2xl border-2 border-blue-300 bg-gradient-to-b from-blue-50/95 to-blue-100/95 p-1.5 sm:p-2.5 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all min-h-0">
           <!-- Player Header -->
-          <div class="flex items-center justify-between border-b-2 border-blue-200/80 pb-2">
+          <div class="flex items-center justify-between border-b border-blue-200/80 pb-1">
             <div>
-              <div class="font-brand text-sm sm:text-xl text-blue-800 flex items-center gap-1">
+              <div class="font-brand text-xs sm:text-base text-blue-800 flex items-center gap-1">
                 <span>🔵</span> <span id="labelP1Name">Pemain 1</span>
               </div>
-              <div class="text-xs font-extrabold text-blue-700">
+              <div class="text-[10px] sm:text-xs font-extrabold text-blue-700">
                 Combo: <span id="labelP1Combo" class="text-amber-600 font-black">0</span>🔥 • Tarikan: <span id="labelP1Pull">0</span>/10
               </div>
             </div>
             <div class="text-right">
-              <span id="labelP1Score" class="font-brand text-base sm:text-2xl text-blue-900 block">0 Poin</span>
+              <span id="labelP1Score" class="font-brand text-sm sm:text-xl text-blue-900 block">0 Poin</span>
             </div>
           </div>
 
-          <!-- Answers Container -->
-          <div id="containerP1Answers" class="flex-1 my-2 flex flex-col justify-center gap-2 overflow-y-auto custom-scroll min-h-0">
+          <!-- Answers Container (Grid 1-col on mobile, 2-cols on tablet/IFP, strictly non-scrollable) -->
+          <div id="containerP1Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-hidden min-h-0">
             <!-- Dynamic Buttons Generated Here -->
           </div>
 
           <!-- Touch / Keyboard Footer Helper -->
-          <div class="text-center pt-1 border-t border-blue-200/70 text-blue-800 text-xs font-black flex items-center justify-center gap-1.5">
-            <span>Tombol:</span>
+          <div class="text-center pt-0.5 border-t border-blue-200/70 text-blue-800 text-[10px] sm:text-xs font-black flex items-center justify-center gap-1">
+            <span class="hidden sm:inline">Tombol:</span>
             <span class="key-badge">A</span>
             <span class="key-badge">S</span>
             <span class="key-badge">D</span>
@@ -458,30 +460,30 @@
         </div>
 
         <!-- PLAYER 2 (RED SIDE - RIGHT) -->
-        <div id="panelP2" class="rounded-3xl border-3 border-red-300 bg-gradient-to-b from-red-50/90 to-red-100/90 p-2 sm:p-4 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
+        <div id="panelP2" class="rounded-2xl border-2 border-red-300 bg-gradient-to-b from-red-50/95 to-red-100/95 p-1.5 sm:p-2.5 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all min-h-0">
           <!-- Player Header -->
-          <div class="flex items-center justify-between border-b-2 border-red-200/80 pb-2">
+          <div class="flex items-center justify-between border-b border-red-200/80 pb-1">
             <div>
-              <div class="font-brand text-sm sm:text-xl text-red-700 flex items-center gap-1">
+              <div class="font-brand text-xs sm:text-base text-red-700 flex items-center gap-1">
                 <span>🔴</span> <span id="labelP2Name">Pemain 2</span>
               </div>
-              <div class="text-xs font-extrabold text-red-700">
+              <div class="text-[10px] sm:text-xs font-extrabold text-red-700">
                 Combo: <span id="labelP2Combo" class="text-amber-600 font-black">0</span>🔥 • Tarikan: <span id="labelP2Pull">0</span>/10
               </div>
             </div>
             <div class="text-right">
-              <span id="labelP2Score" class="font-brand text-base sm:text-2xl text-red-900 block">0 Poin</span>
+              <span id="labelP2Score" class="font-brand text-sm sm:text-xl text-red-900 block">0 Poin</span>
             </div>
           </div>
 
           <!-- Answers Container -->
-          <div id="containerP2Answers" class="flex-1 my-2 flex flex-col justify-center gap-2 overflow-y-auto custom-scroll min-h-0">
+          <div id="containerP2Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-hidden min-h-0">
             <!-- Dynamic Buttons Generated Here -->
           </div>
 
           <!-- Touch / Keyboard Footer Helper -->
-          <div class="text-center pt-1 border-t border-red-200/70 text-red-800 text-xs font-black flex items-center justify-center gap-1.5">
-            <span>Tombol:</span>
+          <div class="text-center pt-0.5 border-t border-red-200/70 text-red-800 text-[10px] sm:text-xs font-black flex items-center justify-center gap-1">
+            <span class="hidden sm:inline">Tombol:</span>
             <span class="key-badge">H</span>
             <span class="key-badge">J</span>
             <span class="key-badge">K</span>
@@ -492,16 +494,16 @@
       </div>
 
       <!-- BOTTOM TUG OF WAR ARENA -->
-      <div class="px-3 sm:px-6 py-2 bg-white/70 border-t-2 border-slate-200 flex-shrink-0">
-        <div class="rope-track max-w-4xl mx-auto flex items-center justify-between px-4">
+      <div class="px-2 sm:px-4 py-1.5 bg-white/70 border-t border-slate-200 flex-shrink-0">
+        <div class="rope-track max-w-4xl mx-auto flex items-center justify-between px-3">
           <div class="rope-braid"></div>
           <div class="rope-center-mark" title="Garis Tengah"></div>
           <div id="ropeFlag" class="rope-flag">🚩</div>
           
-          <div class="z-10 font-brand text-blue-800 text-xs sm:text-base flex items-center gap-1 bg-white/80 px-2 py-0.5 rounded-lg shadow-sm">
+          <div class="z-10 font-brand text-blue-800 text-[11px] sm:text-xs flex items-center gap-1 bg-white/85 px-1.5 py-0.5 rounded shadow-sm">
             <span>🏋️‍♂️</span> <span id="statusPullP1">0 Tarikan</span>
           </div>
-          <div class="z-10 font-brand text-red-700 text-xs sm:text-base flex items-center gap-1 bg-white/80 px-2 py-0.5 rounded-lg shadow-sm">
+          <div class="z-10 font-brand text-red-700 text-[11px] sm:text-xs flex items-center gap-1 bg-white/85 px-1.5 py-0.5 rounded shadow-sm">
             <span id="statusPullP2">0 Tarikan</span> <span>🏋️‍♀️</span>
           </div>
         </div>
@@ -1483,12 +1485,12 @@
         
         options.forEach((optText, optIdx) => {
           const btn = document.createElement('button');
-          btn.className = "answer-card p-2.5 sm:p-3 text-left text-xs sm:text-sm text-slate-800";
+          btn.className = "answer-card text-left text-slate-800 w-full";
           btn.id = `btn_p${playerIdx}_opt${optIdx}`;
           
           btn.innerHTML = `
             <span class="key-badge flex-shrink-0">${keySet[optIdx].toUpperCase()}</span>
-            <span class="flex-1 font-bold leading-tight">${optText}</span>
+            <span class="flex-1 font-bold leading-tight text-[11px] sm:text-xs break-words">${optText}</span>
           `;
 
           btn.onclick = () => handlePlayerAnswer(playerIdx, optIdx);
@@ -1496,19 +1498,19 @@
         });
 
       } else if (q.type === 'essay') {
-        // Essay Answer Box for each player
+        // Essay Answer Box for each player (Compact for Mobile)
         const wrapper = document.createElement('div');
-        wrapper.className = "flex flex-col gap-2 h-full justify-between";
+        wrapper.className = "flex flex-col gap-1.5 h-full justify-between col-span-full";
 
         const textarea = document.createElement('textarea');
         textarea.id = `essay_p${playerIdx}`;
-        textarea.className = "w-full p-2.5 text-xs sm:text-sm font-bold border-2 border-slate-300 rounded-xl focus:outline-none focus:border-sky-500 bg-white resize-none flex-1";
-        textarea.placeholder = `Tuliskan jawaban analitis ${state.players[playerIdx].name}...`;
+        textarea.className = "w-full p-2 text-xs font-bold border-2 border-slate-300 rounded-xl focus:outline-none focus:border-sky-500 bg-white resize-none flex-1";
+        textarea.placeholder = `Jawaban ${state.players[playerIdx].name}...`;
         
         // Submit Button
         const submitBtn = document.createElement('button');
-        submitBtn.className = `btn-3d ${playerIdx === 0 ? 'btn-blue' : 'btn-red'} text-xs sm:text-sm py-2 flex items-center justify-center gap-1.5`;
-        submitBtn.innerHTML = `<span>📤</span> Kirim Jawaban (Tekan ${keySet[0].toUpperCase()})`;
+        submitBtn.className = `btn-3d ${playerIdx === 0 ? 'btn-blue' : 'btn-red'} text-xs py-1.5 px-3 flex items-center justify-center gap-1`;
+        submitBtn.innerHTML = `<span>📤</span> Kirim (Tekan ${keySet[0].toUpperCase()})`;
         submitBtn.onclick = () => handlePlayerAnswer(playerIdx, textarea.value);
 
         wrapper.appendChild(textarea);
