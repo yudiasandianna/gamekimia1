@@ -31,11 +31,13 @@
     }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       width: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       font-family: 'Nunito', sans-serif;
       color: var(--dark-ink);
       background: radial-gradient(circle at 50% 20%, #e0f2fe 0%, #fef3c7 60%, #fed7aa 100%);
@@ -45,14 +47,15 @@
       font-family: 'Fredoka One', cursive;
     }
 
-    /* Screen States */
+    /* Screen States - Responsive & Touch-Scrollable on Mobile */
     .screen {
       display: none;
-      height: 100dvh;
-      width: 100vw;
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
+      min-height: 100dvh;
+      width: 100%;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
     .screen.active {
       display: flex;
@@ -243,67 +246,67 @@
   <!-- ==========================================
        SCREEN 1: ONBOARDING SCREEN
        ========================================== -->
-  <section id="screenOnboarding" class="screen active flex-col items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-3xl p-6 sm:p-8 flex flex-col items-center text-center gap-5">
-      <div class="flex items-center gap-3 text-5xl sm:text-6xl animate-bounce">
+  <section id="screenOnboarding" class="screen active flex-col items-center justify-center p-3 sm:p-6 py-6 min-h-[100dvh]">
+    <div class="glass-panel w-full max-w-3xl p-4 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-5 my-auto">
+      <div class="flex items-center gap-3 text-4xl sm:text-6xl animate-bounce">
         <span>🧪</span>
         <span>⚡</span>
         <span>🧬</span>
       </div>
       
       <div>
-        <h1 class="font-brand text-4xl sm:text-5xl md:text-6xl text-sky-800 tracking-wide drop-shadow-sm">
+        <h1 class="font-brand text-3xl sm:text-5xl md:text-6xl text-sky-800 tracking-wide drop-shadow-sm">
           TARIK TAMBANG KIMIA
         </h1>
-        <p class="text-base sm:text-xl font-bold text-slate-600 mt-2">
+        <p class="text-sm sm:text-xl font-bold text-slate-600 mt-1 sm:mt-2">
           Adu Cepat & Tepat Hidrokarbon • 2 Pemain 1 Perangkat (Local Multiplayer)
         </p>
-        <span class="inline-block mt-1 px-3 py-1 bg-sky-100 text-sky-800 text-xs sm:text-sm font-black rounded-full">
+        <span class="inline-block mt-1 px-3 py-1 bg-sky-100 text-sky-800 text-[11px] sm:text-sm font-black rounded-full">
           Materi: Atom C • Alkana, Alkena, Alkuna • Reaksi Substitusi, Adisi, Eliminasi (Kelas XII SMA)
         </span>
       </div>
 
       <!-- Player Input Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full mt-1">
         <!-- Player 1 Blue -->
-        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-left shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-brand text-lg text-blue-700 flex items-center gap-1.5">
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-3 sm:p-4 text-left shadow-sm">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-brand text-base sm:text-lg text-blue-700 flex items-center gap-1.5">
               <span>🔵</span> Tim Biru (P1)
             </span>
-            <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-md">Keyboard: A S D F</span>
+            <span class="text-[10px] sm:text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-md">Keyboard: A S D F</span>
           </div>
           <input id="inputP1Name" type="text" maxlength="15" value="Pemain 1"
-            class="w-full px-4 py-2.5 rounded-xl border-2 border-blue-300 font-extrabold text-blue-900 focus:outline-none focus:border-blue-500 bg-white shadow-inner"
+            class="w-full px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl border-2 border-blue-300 font-extrabold text-blue-900 focus:outline-none focus:border-blue-500 bg-white shadow-inner text-sm sm:text-base"
             placeholder="Ketik Nama Pemain 1">
         </div>
 
         <!-- Player 2 Red -->
-        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-left shadow-sm">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-brand text-lg text-red-600 flex items-center gap-1.5">
+        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-3 sm:p-4 text-left shadow-sm">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-brand text-base sm:text-lg text-red-600 flex items-center gap-1.5">
               <span>🔴</span> Tim Merah (P2)
             </span>
-            <span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-md">Keyboard: H J K L</span>
+            <span class="text-[10px] sm:text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-md">Keyboard: H J K L</span>
           </div>
           <input id="inputP2Name" type="text" maxlength="15" value="Pemain 2"
-            class="w-full px-4 py-2.5 rounded-xl border-2 border-red-300 font-extrabold text-red-900 focus:outline-none focus:border-red-500 bg-white shadow-inner"
+            class="w-full px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl border-2 border-red-300 font-extrabold text-red-900 focus:outline-none focus:border-red-500 bg-white shadow-inner text-sm sm:text-base"
             placeholder="Ketik Nama Pemain 2">
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full mt-3">
-        <button onclick="openModal('helpModal')" class="btn-3d btn-soft flex items-center gap-2">
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full mt-2">
+        <button onclick="openModal('helpModal')" class="btn-3d btn-soft flex items-center gap-1.5 text-sm sm:text-base py-2.5 px-4 sm:py-3 sm:px-6">
           <span>📘</span> Petunjuk Bermain
         </button>
-        <button onclick="goToDiagnostic()" class="btn-3d btn-blue flex items-center gap-2 text-xl px-8 py-3.5">
+        <button onclick="goToDiagnostic()" class="btn-3d btn-blue flex items-center gap-1.5 text-base sm:text-xl px-6 py-2.5 sm:px-8 sm:py-3.5">
           <span>🚀</span> MULAI TANTANGAN!
         </button>
       </div>
 
       <!-- Footer Info -->
-      <p class="text-xs text-slate-500 font-bold mt-2">
+      <p class="text-[11px] sm:text-xs text-slate-500 font-bold mt-1">
         Dirancang khusus untuk Laptop, Chromebook, Tablet, HP & Layar Sentuh Interaktif (IFP)
       </p>
     </div>
@@ -312,16 +315,16 @@
   <!-- ==========================================
        SCREEN 2: DIAGNOSTIC / LEVEL SELECTION
        ========================================== -->
-  <section id="screenDiagnostic" class="screen flex-col items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-4xl p-6 sm:p-8 flex flex-col items-center text-center gap-5">
+  <section id="screenDiagnostic" class="screen flex-col items-center justify-center p-3 sm:p-6 py-6 min-h-[100dvh]">
+    <div class="glass-panel w-full max-w-4xl p-4 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-5 my-auto">
       <div>
-        <h2 class="font-brand text-3xl sm:text-4xl text-slate-800">🎯 Pilih Level Diagnostik Awal</h2>
-        <p class="text-sm sm:text-base font-bold text-slate-600 mt-1">
+        <h2 class="font-brand text-2xl sm:text-4xl text-slate-800">🎯 Pilih Level Diagnostik Awal</h2>
+        <p class="text-xs sm:text-base font-bold text-slate-600 mt-1">
           Pilih level awal untuk memulai. Sistem adaptif akan menaikkan level soal secara otomatis jika combo tercapai!
         </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full">
         <!-- Level 1: Mudah (LOTS) -->
         <button onclick="startGameWithLevel('easy')" 
           class="bg-emerald-50 hover:bg-emerald-100/80 border-3 border-emerald-400 p-5 rounded-2xl flex flex-col items-center text-center transition-transform hover:-translate-y-1 shadow-md">
@@ -444,8 +447,8 @@
             </div>
           </div>
 
-          <!-- Answers Container (Grid 1-col on mobile, 2-cols on tablet/IFP, strictly non-scrollable) -->
-          <div id="containerP1Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-hidden min-h-0">
+          <!-- Answers Container (Responsive & Touch-Scrollable) -->
+          <div id="containerP1Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-y-auto custom-scroll min-h-[110px]">
             <!-- Dynamic Buttons Generated Here -->
           </div>
 
@@ -477,7 +480,7 @@
           </div>
 
           <!-- Answers Container -->
-          <div id="containerP2Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-hidden min-h-0">
+          <div id="containerP2Answers" class="flex-1 my-1 grid grid-cols-1 md:grid-cols-2 gap-1 sm:gap-1.5 content-center overflow-y-auto custom-scroll min-h-[110px]">
             <!-- Dynamic Buttons Generated Here -->
           </div>
 
@@ -514,8 +517,8 @@
   <!-- ==========================================
        SCREEN 4: GAME OVER & REPORT SCREEN
        ========================================== -->
-  <section id="screenGameOver" class="screen flex-col items-center justify-center p-3 sm:p-4">
-    <div class="glass-panel w-full max-w-4xl p-5 sm:p-7 flex flex-col gap-3.5 max-h-[96dvh] overflow-y-auto custom-scroll text-center">
+  <section id="screenGameOver" class="screen flex-col items-center justify-center p-3 sm:p-6 py-6 min-h-[100dvh]">
+    <div class="glass-panel w-full max-w-4xl p-4 sm:p-7 flex flex-col gap-3.5 my-auto text-center">
       
       <!-- Trophy & Winner Title -->
       <div>
@@ -1341,6 +1344,8 @@
       if (target) {
         target.classList.add('active');
         state.screen = screenId;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        target.scrollTop = 0;
       }
     }
 
