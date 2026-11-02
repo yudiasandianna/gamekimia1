@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tarik Tambang KIMIA - Game Edukasi Hidrokarbon Kelas XII</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Fredoka One & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue-primary: #1e88e5;
+      --blue-dark: #1565c0;
+      --red-primary: #e53935;
+      --red-dark: #c62828;
+      --yellow-accent: #fbc02d;
+      --dark-ink: #1a2332;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Nunito', sans-serif;
+      color: var(--dark-ink);
+      background: radial-gradient(circle at 50% 20%, #e0f2fe 0%, #fef3c7 60%, #fed7aa 100%);
+    }
+
+    .font-brand {
+      font-family: 'Fredoka One', cursive;
+    }
+
+    /* Screen States */
+    .screen {
+      display: none;
+      height: 100dvh;
+      width: 100vw;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    /* Soft 3D Educational Glassmorphism UI */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      border: 3px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      box-shadow: 0 14px 35px -8px rgba(15, 23, 42, 0.16), 0 4px 10px rgba(0,0,0,0.04);
+    }
+
+    .btn-3d {
+      position: relative;
+      font-family: 'Fredoka One', cursive;
+      letter-spacing: 0.5px;
+      border-radius: 18px;
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .btn-3d:active {
+      transform: translateY(4px);
+    }
+
+    .btn-blue {
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      box-shadow: 0 6px 0 #1e40af, 0 10px 20px rgba(29, 78, 216, 0.35);
+    }
+    .btn-blue:active {
+      box-shadow: 0 2px 0 #1e40af;
+    }
+
+    .btn-red {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      color: white;
+      box-shadow: 0 6px 0 #991b1b, 0 10px 20px rgba(185, 28, 28, 0.35);
+    }
+    .btn-red:active {
+      box-shadow: 0 2px 0 #991b1b;
+    }
+
+    .btn-gold {
+      background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      box-shadow: 0 6px 0 #b45309, 0 10px 20px rgba(217, 119, 6, 0.35);
+    }
+    .btn-gold:active {
+      box-shadow: 0 2px 0 #b45309;
+    }
+
+    .btn-soft {
+      background: #f1f5f9;
+      color: #334155;
+      box-shadow: 0 5px 0 #cbd5e1;
+    }
+    .btn-soft:active {
+      box-shadow: 0 2px 0 #cbd5e1;
+    }
+
+    /* Interactive Answer Cards */
+    .answer-card {
+      border: 3px solid #e2e8f0;
+      border-radius: 16px;
+      background: white;
+      font-weight: 800;
+      transition: all 0.12s ease;
+      box-shadow: 0 4px 0 #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .answer-card:hover:not(:disabled) {
+      border-color: #93c5fd;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #cbd5e1;
+    }
+    .answer-card:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #cbd5e1;
+    }
+    .answer-card:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Key Tag */
+    .key-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: #f8fafc;
+      border: 2px solid #94a3b8;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #334155;
+      box-shadow: 0 2px 0 #94a3b8;
+    }
+
+    /* Rope & Tug Arena */
+    .rope-track {
+      height: 64px;
+      position: relative;
+      background: linear-gradient(180deg, #fed7aa 0%, #fdba74 100%);
+      border-radius: 32px;
+      border: 4px solid #ffffff;
+      box-shadow: inset 0 4px 10px rgba(124, 45, 18, 0.25), 0 8px 18px rgba(0,0,0,0.1);
+      overflow: visible;
+    }
+    .rope-braid {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      top: 50%;
+      height: 14px;
+      transform: translateY(-50%);
+      background: repeating-linear-gradient(45deg, #b45309 0px, #b45309 10px, #d97706 10px, #d97706 20px);
+      border-radius: 7px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+    .rope-center-mark {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #ffffff;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+    .rope-flag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 44px;
+      transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 10;
+      filter: drop-shadow(0 6px 6px rgba(0,0,0,0.3));
+    }
+
+    /* Screen Shake Animation */
+    .shake-side {
+      animation: shakeAnim 0.38s ease-in-out;
+    }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-12px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-8px); }
+      80% { transform: translateX(6px); }
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="flex flex-col h-full w-full">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ==========================================
+       SCREEN 1: ONBOARDING SCREEN
+       ========================================== -->
+  <section id="screenOnboarding" class="screen active flex-col items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-3xl p-6 sm:p-8 flex flex-col items-center text-center gap-5">
+      <div class="flex items-center gap-3 text-5xl sm:text-6xl animate-bounce">
+        <span>🧪</span>
+        <span>⚡</span>
+        <span>🧬</span>
+      </div>
+      
+      <div>
+        <h1 class="font-brand text-4xl sm:text-5xl md:text-6xl text-sky-800 tracking-wide drop-shadow-sm">
+          TARIK TAMBANG KIMIA
+        </h1>
+        <p class="text-base sm:text-xl font-bold text-slate-600 mt-2">
+          Adu Cepat & Tepat Hidrokarbon • 2 Pemain 1 Perangkat (Local Multiplayer)
+        </p>
+        <span class="inline-block mt-1 px-3 py-1 bg-sky-100 text-sky-800 text-xs sm:text-sm font-black rounded-full">
+          Materi: Atom C • Alkana, Alkena, Alkuna • Reaksi Substitusi, Adisi, Eliminasi (Kelas XII SMA)
+        </span>
+      </div>
+
+      <!-- Player Input Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mt-2">
+        <!-- Player 1 Blue -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-left shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-brand text-lg text-blue-700 flex items-center gap-1.5">
+              <span>🔵</span> Tim Biru (P1)
+            </span>
+            <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-md">Keyboard: A S D F</span>
+          </div>
+          <input id="inputP1Name" type="text" maxlength="15" value="Pemain 1"
+            class="w-full px-4 py-2.5 rounded-xl border-2 border-blue-300 font-extrabold text-blue-900 focus:outline-none focus:border-blue-500 bg-white shadow-inner"
+            placeholder="Ketik Nama Pemain 1">
+        </div>
+
+        <!-- Player 2 Red -->
+        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-left shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-brand text-lg text-red-600 flex items-center gap-1.5">
+              <span>🔴</span> Tim Merah (P2)
+            </span>
+            <span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-md">Keyboard: H J K L</span>
+          </div>
+          <input id="inputP2Name" type="text" maxlength="15" value="Pemain 2"
+            class="w-full px-4 py-2.5 rounded-xl border-2 border-red-300 font-extrabold text-red-900 focus:outline-none focus:border-red-500 bg-white shadow-inner"
+            placeholder="Ketik Nama Pemain 2">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full mt-3">
+        <button onclick="openModal('helpModal')" class="btn-3d btn-soft flex items-center gap-2">
+          <span>📘</span> Petunjuk Bermain
+        </button>
+        <button onclick="goToDiagnostic()" class="btn-3d btn-blue flex items-center gap-2 text-xl px-8 py-3.5">
+          <span>🚀</span> MULAI TANTANGAN!
+        </button>
+      </div>
+
+      <!-- Footer Info -->
+      <p class="text-xs text-slate-500 font-bold mt-2">
+        Dirancang khusus untuk Laptop, Chromebook, Tablet, HP & Layar Sentuh Interaktif (IFP)
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SCREEN 2: DIAGNOSTIC / LEVEL SELECTION
+       ========================================== -->
+  <section id="screenDiagnostic" class="screen flex-col items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-4xl p-6 sm:p-8 flex flex-col items-center text-center gap-5">
+      <div>
+        <h2 class="font-brand text-3xl sm:text-4xl text-slate-800">🎯 Pilih Level Diagnostik Awal</h2>
+        <p class="text-sm sm:text-base font-bold text-slate-600 mt-1">
+          Pilih level awal untuk memulai. Sistem adaptif akan menaikkan level soal secara otomatis jika combo tercapai!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+        <!-- Level 1: Mudah (LOTS) -->
+        <button onclick="startGameWithLevel('easy')" 
+          class="bg-emerald-50 hover:bg-emerald-100/80 border-3 border-emerald-400 p-5 rounded-2xl flex flex-col items-center text-center transition-transform hover:-translate-y-1 shadow-md">
+          <div class="text-4xl sm:text-5xl mb-2">🌱</div>
+          <span class="font-brand text-2xl text-emerald-800">LEVEL 1: MUDAH</span>
+          <span class="text-xs font-black text-emerald-600 bg-emerald-200/70 px-2 py-0.5 rounded-full my-1">
+            LOTS • 20 Soal PG
+          </span>
+          <p class="text-xs font-bold text-slate-600 mt-2">
+            Identifikasi jenis atom C (primer, sekunder, tersier, kuarterner), rumus alkana/alkena/alkuna, & konsep dasar.
+          </p>
+        </button>
+
+        <!-- Level 2: Sedang -->
+        <button onclick="startGameWithLevel('medium')" 
+          class="bg-amber-50 hover:bg-amber-100/80 border-3 border-amber-400 p-5 rounded-2xl flex flex-col items-center text-center transition-transform hover:-translate-y-1 shadow-md">
+          <div class="text-4xl sm:text-5xl mb-2">⚡</div>
+          <span class="font-brand text-2xl text-amber-800">LEVEL 2: SEDANG</span>
+          <span class="text-xs font-black text-amber-700 bg-amber-200/70 px-2 py-0.5 rounded-full my-1">
+            MOTS • 15 Soal Menjodohkan
+          </span>
+          <p class="text-xs font-bold text-slate-600 mt-2">
+            Mencocokkan istilah, rumus struktur hidrokarbon, mekanisme substitusi, adisi, dan eliminasi.
+          </p>
+        </button>
+
+        <!-- Level 3: Sulit (HOTS) -->
+        <button onclick="startGameWithLevel('hard')" 
+          class="bg-rose-50 hover:bg-rose-100/80 border-3 border-rose-400 p-5 rounded-2xl flex flex-col items-center text-center transition-transform hover:-translate-y-1 shadow-md">
+          <div class="text-4xl sm:text-5xl mb-2">🧠</div>
+          <span class="font-brand text-2xl text-rose-800">LEVEL 3: SULIT</span>
+          <span class="text-xs font-black text-rose-600 bg-rose-200/70 px-2 py-0.5 rounded-full my-1">
+            HOTS • 15 Soal Esai Analitis
+          </span>
+          <p class="text-xs font-bold text-slate-600 mt-2">
+            Analisis kontekstual: hidrogenasi minyak, aturan Markovnikov, uji bromin, isomer, dan evaluasi reaksi.
+          </p>
+        </button>
+      </div>
+
+      <button onclick="changeScreen('screenOnboarding')" class="btn-3d btn-soft mt-2 text-sm flex items-center gap-1.5">
+        <span>⬅️</span> Kembali ke Layar Awal
+      </button>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SCREEN 3: GAMEPLAY ARENA (SPLIT-SCREEN)
+       ========================================== -->
+  <section id="screenGame" class="screen flex-col">
+    <!-- Top Header Bar -->
+    <header class="h-14 sm:h-16 px-3 sm:px-6 bg-white/95 border-b-2 border-slate-200 flex items-center justify-between z-20 shadow-sm flex-shrink-0">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <span class="text-2xl sm:text-3xl">⚗️</span>
+        <div>
+          <span class="font-brand text-lg sm:text-2xl text-sky-900 leading-none block">TARIK TAMBANG KIMIA</span>
+          <span id="labelQuestionProgress" class="text-xs font-extrabold text-slate-500">Soal 1 / 50</span>
+        </div>
+      </div>
+
+      <!-- Quick Audio & Accessibility Toolbar -->
+      <div class="flex items-center gap-2">
+        <button id="btnTTS" onclick="readQuestionTTS()" title="Dengarkan Soal (Text to Speech)" 
+          class="px-2.5 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 transition">
+          <span>🔊</span> <span class="hidden sm:inline">Bacakan</span>
+        </button>
+        <button id="btnMusic" onclick="toggleBackgroundMusic()" title="Nyalakan/Matikan Musik Belajar"
+          class="px-2.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 font-extrabold text-xs sm:text-sm rounded-xl flex items-center gap-1.5 transition">
+          <span id="musicIcon">🎵</span> <span id="musicLabel" class="hidden sm:inline">Musik: OFF</span>
+        </button>
+        <button onclick="openModal('helpModal')" title="Petunjuk Bermain"
+          class="w-8 h-8 rounded-xl bg-slate-200 hover:bg-slate-300 font-extrabold text-slate-700 flex items-center justify-center text-sm">
+          ?
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Play Area -->
+    <main class="flex-1 flex flex-col min-h-0 relative">
+      
+      <!-- Central Question & Feedback Panel -->
+      <div class="p-2 sm:p-3 flex-shrink-0 z-10">
+        <div class="glass-panel mx-auto max-w-4xl p-3 sm:p-4 text-center">
+          <div class="flex items-center justify-between text-xs font-black mb-1">
+            <span id="badgeQuestionLevel" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+              LEVEL 1: LOTS • PILIHAN GANDA
+            </span>
+            <span id="labelTimer" class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 font-mono">
+              ⏱ 00.0s
+            </span>
+          </div>
+
+          <h2 id="textQuestionPrompt" class="text-sm sm:text-lg md:text-xl font-extrabold text-slate-800 my-1 leading-tight">
+            Memuat pertanyaan...
+          </h2>
+          <p id="textQuestionContext" class="text-xs sm:text-sm text-slate-500 font-bold min-h-4"></p>
+
+          <!-- Dynamic Instant Feedback Banner -->
+          <div id="bannerFeedback" class="text-xs sm:text-sm font-black min-h-6 transition-all duration-200 mt-1"></div>
+        </div>
+      </div>
+
+      <!-- Split Screen Player Control Area -->
+      <div class="flex-1 grid grid-cols-2 gap-2 px-2 sm:px-4 min-h-0 pb-1">
+        
+        <!-- PLAYER 1 (BLUE SIDE - LEFT) -->
+        <div id="panelP1" class="rounded-3xl border-3 border-blue-300 bg-gradient-to-b from-blue-50/90 to-blue-100/90 p-2 sm:p-4 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
+          <!-- Player Header -->
+          <div class="flex items-center justify-between border-b-2 border-blue-200/80 pb-2">
+            <div>
+              <div class="font-brand text-sm sm:text-xl text-blue-800 flex items-center gap-1">
+                <span>🔵</span> <span id="labelP1Name">Pemain 1</span>
+              </div>
+              <div class="text-xs font-extrabold text-blue-700">
+                Combo: <span id="labelP1Combo" class="text-amber-600 font-black">0</span>🔥 • Tarikan: <span id="labelP1Pull">0</span>/10
+              </div>
+            </div>
+            <div class="text-right">
+              <span id="labelP1Score" class="font-brand text-base sm:text-2xl text-blue-900 block">0 Poin</span>
+            </div>
+          </div>
+
+          <!-- Answers Container -->
+          <div id="containerP1Answers" class="flex-1 my-2 flex flex-col justify-center gap-2 overflow-y-auto custom-scroll min-h-0">
+            <!-- Dynamic Buttons Generated Here -->
+          </div>
+
+          <!-- Touch / Keyboard Footer Helper -->
+          <div class="text-center pt-1 border-t border-blue-200/70 text-blue-800 text-xs font-black flex items-center justify-center gap-1.5">
+            <span>Tombol:</span>
+            <span class="key-badge">A</span>
+            <span class="key-badge">S</span>
+            <span class="key-badge">D</span>
+            <span class="key-badge">F</span>
+          </div>
+        </div>
+
+        <!-- PLAYER 2 (RED SIDE - RIGHT) -->
+        <div id="panelP2" class="rounded-3xl border-3 border-red-300 bg-gradient-to-b from-red-50/90 to-red-100/90 p-2 sm:p-4 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all">
+          <!-- Player Header -->
+          <div class="flex items-center justify-between border-b-2 border-red-200/80 pb-2">
+            <div>
+              <div class="font-brand text-sm sm:text-xl text-red-700 flex items-center gap-1">
+                <span>🔴</span> <span id="labelP2Name">Pemain 2</span>
+              </div>
+              <div class="text-xs font-extrabold text-red-700">
+                Combo: <span id="labelP2Combo" class="text-amber-600 font-black">0</span>🔥 • Tarikan: <span id="labelP2Pull">0</span>/10
+              </div>
+            </div>
+            <div class="text-right">
+              <span id="labelP2Score" class="font-brand text-base sm:text-2xl text-red-900 block">0 Poin</span>
+            </div>
+          </div>
+
+          <!-- Answers Container -->
+          <div id="containerP2Answers" class="flex-1 my-2 flex flex-col justify-center gap-2 overflow-y-auto custom-scroll min-h-0">
+            <!-- Dynamic Buttons Generated Here -->
+          </div>
+
+          <!-- Touch / Keyboard Footer Helper -->
+          <div class="text-center pt-1 border-t border-red-200/70 text-red-800 text-xs font-black flex items-center justify-center gap-1.5">
+            <span>Tombol:</span>
+            <span class="key-badge">H</span>
+            <span class="key-badge">J</span>
+            <span class="key-badge">K</span>
+            <span class="key-badge">L</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM TUG OF WAR ARENA -->
+      <div class="px-3 sm:px-6 py-2 bg-white/70 border-t-2 border-slate-200 flex-shrink-0">
+        <div class="rope-track max-w-4xl mx-auto flex items-center justify-between px-4">
+          <div class="rope-braid"></div>
+          <div class="rope-center-mark" title="Garis Tengah"></div>
+          <div id="ropeFlag" class="rope-flag">🚩</div>
+          
+          <div class="z-10 font-brand text-blue-800 text-xs sm:text-base flex items-center gap-1 bg-white/80 px-2 py-0.5 rounded-lg shadow-sm">
+            <span>🏋️‍♂️</span> <span id="statusPullP1">0 Tarikan</span>
+          </div>
+          <div class="z-10 font-brand text-red-700 text-xs sm:text-base flex items-center gap-1 bg-white/80 px-2 py-0.5 rounded-lg shadow-sm">
+            <span id="statusPullP2">0 Tarikan</span> <span>🏋️‍♀️</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- ==========================================
+       SCREEN 4: GAME OVER & REPORT SCREEN
+       ========================================== -->
+  <section id="screenGameOver" class="screen flex-col items-center justify-center p-3 sm:p-4">
+    <div class="glass-panel w-full max-w-4xl p-5 sm:p-7 flex flex-col gap-3.5 max-h-[96dvh] overflow-y-auto custom-scroll text-center">
+      
+      <!-- Trophy & Winner Title -->
+      <div>
+        <div class="text-5xl sm:text-6xl animate-bounce">🏆🎉</div>
+        <h1 id="titleWinner" class="font-brand text-3xl sm:text-5xl text-sky-900 mt-1">
+          PEMENANG PERTANDINGAN!
+        </h1>
+        <p id="descWinner" class="font-extrabold text-sm sm:text-lg text-slate-600">
+          Pertandingan selesai dengan sengit!
+        </p>
+      </div>
+
+      <!-- Digital Badges Awarded -->
+      <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-3">
+        <span class="text-xs font-black uppercase text-amber-800 tracking-wider block mb-1">
+          🎖️ Lencana Digital Yang Diraih
+        </span>
+        <div id="containerBadges" class="flex flex-wrap justify-center gap-2">
+          <!-- Badges dynamically inserted -->
+        </div>
+      </div>
+
+      <!-- Game Rapor Comparison Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+        <!-- P1 Report -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-3.5">
+          <div class="font-brand text-blue-800 text-lg flex items-center justify-between">
+            <span id="finalP1Title">🔵 Pemain 1</span>
+            <span id="finalP1Score" class="text-xl">0 Pts</span>
+          </div>
+          <div id="finalP1Details" class="text-xs sm:text-sm text-slate-700 font-bold mt-2 space-y-1"></div>
+        </div>
+
+        <!-- P2 Report -->
+        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-3.5">
+          <div class="font-brand text-red-700 text-lg flex items-center justify-between">
+            <span id="finalP2Title">🔴 Pemain 2</span>
+            <span id="finalP2Score" class="text-xl">0 Pts</span>
+          </div>
+          <div id="finalP2Details" class="text-xs sm:text-sm text-slate-700 font-bold mt-2 space-y-1"></div>
+        </div>
+      </div>
+
+      <!-- Student Reflection Form -->
+      <div class="text-left bg-slate-50 border-2 border-slate-200 rounded-2xl p-3">
+        <label for="inputReflection" class="font-black text-xs sm:text-sm text-slate-700 block mb-1">
+          📝 Refleksi Pembelajaran: Konsep kimia apa yang berhasil kamu pahami atau ingin dipelajari lebih lanjut?
+        </label>
+        <textarea id="inputReflection" rows="2" 
+          placeholder="Tuliskan refleksi singkat di sini (misal: 'Saya sekarang lebih memahami perbedaan reaksi adisi Markovnikov dan eliminasi')..."
+          class="w-full text-xs sm:text-sm p-2.5 rounded-xl border-2 border-slate-300 font-bold focus:outline-none focus:border-sky-500 bg-white"></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <button onclick="downloadCertificateA4()" class="btn-3d btn-gold flex items-center gap-1.5 text-sm sm:text-base">
+          <span>📜</span> Unduh Sertifikat (PNG A4)
+        </button>
+        <button id="btnSaveData" onclick="saveGameData()" class="btn-3d btn-blue flex items-center gap-1.5 text-sm sm:text-base">
+          <span>💾</span> Simpan Data
+        </button>
+        <button onclick="readReportTTS()" class="btn-3d btn-soft flex items-center gap-1.5 text-sm sm:text-base">
+          <span>🔊</span> Bacakan Rapor
+        </button>
+        <button onclick="restartGame()" class="btn-3d btn-soft flex items-center gap-1.5 text-sm sm:text-base">
+          <span>🔄</span> Main Lagi
+        </button>
+      </div>
+
+      <!-- Save Status Label -->
+      <div id="labelSaveStatus" class="text-xs font-black min-h-4 text-emerald-700"></div>
+
+      <!-- Author Attribution -->
+      <footer class="text-slate-500 text-xs font-bold border-t border-slate-200 pt-2">
+        Created by: <span class="text-sky-800 font-black">Yudiasandi Anna</span> • Game Edukasi Kimia Kelas XII SMA • Terhubung ke Supabase & Google Spreadsheet
+      </footer>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       MODAL: PETUNJUK BERMAIN (HELP)
+       ========================================== -->
+  <div id="helpModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-xl p-6 text-left flex flex-col gap-3 max-h-[90dvh] overflow-y-auto custom-scroll">
+      <div class="flex items-center justify-between border-b pb-2">
+        <h2 class="font-brand text-2xl text-sky-800 flex items-center gap-2">
+          <span>📘</span> Petunjuk Bermain
+        </h2>
+        <button onclick="closeModal('helpModal')" class="text-slate-400 hover:text-slate-600 font-black text-2xl leading-none">&times;</button>
+      </div>
+
+      <div class="text-xs sm:text-sm font-bold text-slate-700 space-y-2.5">
+        <p>1. <strong>Local Multiplayer:</strong> Dua murid bertanding langsung pada satu layar perangkat (Laptop/HP/IFP).</p>
+        <p>2. <strong>Kontrol Jawaban:</strong>
+          <br>• Pemain 1 (Tim Biru): Tombol keyboard <span class="key-badge">A</span> <span class="key-badge">S</span> <span class="key-badge">D</span> <span class="key-badge">F</span> atau sentuh layar kiri.
+          <br>• Pemain 2 (Tim Merah): Tombol keyboard <span class="key-badge">H</span> <span class="key-badge">J</span> <span class="key-badge">K</span> <span class="key-badge">L</span> atau sentuh layar kanan.
+        </p>
+        <p>3. <strong>Sistem Skor & Tarikan:</strong>
+          <br>• Jawaban Benar: <strong>+50 Poin</strong> & menarik bendera tali tambang 1 langkah ke sisimu.
+          <br>• Kecepatan Menjawab: Bonus <strong>+10 s/d +30 Poin</strong> jika menjawab dengan cepat.
+          <br>• Combo Berturut-turut: Bonus <strong>+20 Poin</strong> jika menjawab benar 2 kali atau lebih secara beruntun.
+          <br>• Jawaban Salah: Layar bergetar (shake), combo kembali 0, dan muncul pembahasan konsep.
+        </p>
+        <p>4. <strong>Kesulitan Adaptif:</strong> Jika pemain meraih combo 2 kali berturut-turut, tingkat kesulitan soal otomatis dinaikkan bertahap (LOTS ➡️ Sedang ➡️ HOTS)!</p>
+        <p>5. <strong>Kemenangan:</strong> Permainan berakhir jika bendera tambang berhasil ditarik <strong>10 kali</strong> ke salah satu sisi (K.O.), atau jika soal selesai dengan poin tertinggi!</p>
+      </div>
+
+      <button onclick="closeModal('helpModal')" class="btn-3d btn-blue w-full mt-2 text-center font-brand">
+        Siap, Mengerti! 👍
+      </button>
+    </div>
+  </div>
+
+  <!-- Background Audio Element -->
+  <audio id="audioBackground" loop></audio>
+
+  <!-- ==========================================
+       JAVASCRIPT GAME ENGINE
+       ========================================== -->
+  <script>
+    /* ==========================================
+       CONFIG & GLOBAL STATE
+       ========================================== */
+    const SUPABASE_CONFIG = {
+      url: "https://tpwrujzngktkatmwfoza.supabase.co",
+      key: "sb_publishable_uyS62as78rXTdlcgLcrYlQ_1fl9BdpO"
+    };
+
+    // Google Apps Script Web App Endpoint URL (dapat diperbarui jika pengguna memasang script)
+    let GOOGLE_SCRIPT_URL = "URL_WEB_APP_ANDA";
+
+    let state = {
+      screen: "screenOnboarding",
+      players: [
+        { name: "Pemain 1", score: 0, combo: 0, maxCombo: 0, pulls: 0, correct: 0, wrong: 0, fastAnswers: 0, hotsCorrect: 0, answered: false, essayText: "" },
+        { name: "Pemain 2", score: 0, combo: 0, maxCombo: 0, pulls: 0, correct: 0, wrong: 0, fastAnswers: 0, hotsCorrect: 0, answered: false, essayText: "" }
+      ],
+      initialLevel: "easy",
+      currentLevelIndex: 0, // 0: Easy (LOTS), 1: Medium (Sedang), 2: Hard (HOTS)
+      questionsQueue: [],
+      currentQuestionIndex: 0,
+      questionStartTime: 0,
+      timerInterval: null,
+      musicPlaying: false,
+      isGameOver: false
+    };
+
+    const KEY_MAPPINGS = {
+      player1: ['a', 's', 'd', 'f'],
+      player2: ['h', 'j', 'k', 'l']
+    };
+
+    /* ==========================================
+       50 CHEMISTRY QUESTIONS DATABASE
+       - Level 1: 20 Soal PG (LOTS)
+       - Level 2: 15 Soal Menjodohkan (Sedang)
+       - Level 3: 15 Soal Esai Analitis (HOTS)
+       ========================================== */
+    const CHEMISTRY_DB = {
+      // 20 SOAL PG (LOTS)
+      easy: [
+        {
+          id: "E01",
+          type: "mc",
+          levelLabel: "LOTS • Atom C",
+          q: "Atom karbon yang mengikat langsung 1 atom karbon lain disebut atom C ...",
+          options: ["Primer", "Sekunder", "Tersier", "Kuarterner"],
+          correct: 0,
+          why: "Atom C primer hanya berikatan langsung dengan 1 atom karbon lainnya (biasanya di ujung rantai -CH3)."
+        },
+        {
+          id: "E02",
+          type: "mc",
+          levelLabel: "LOTS • Atom C",
+          q: "Atom C sekunder adalah atom karbon yang berikatan langsung dengan berapa atom C lain?",
+          options: ["1 atom C", "2 atom C", "3 atom C", "4 atom C"],
+          correct: 1,
+          why: "Atom C sekunder mengikat langsung 2 atom karbon lain (contohnya gugus -CH2- pada rantai terbuka)."
+        },
+        {
+          id: "E03",
+          type: "mc",
+          levelLabel: "LOTS • Atom C",
+          q: "Gugus -CH- yang mengikat 3 atom karbon lain termasuk jenis atom C ...",
+          options: ["Primer", "Sekunder", "Tersier", "Kuarterner"],
+          correct: 2,
+          why: "Atom C tersier mengikat langsung 3 atom karbon lain dan biasanya memiliki 1 atom H."
+        },
+        {
+          id: "E04",
+          type: "mc",
+          levelLabel: "LOTS • Atom C",
+          q: "Atom karbon kuarterner mengikat langsung sejumlah atom C lain sebanyak ...",
+          options: ["1", "2", "3", "4"],
+          correct: 3,
+          why: "Atom C kuarterner mengikat 4 atom C lain sehingga tidak lagi mengikat atom H."
+        },
+        {
+          id: "E05",
+          type: "mc",
+          levelLabel: "LOTS • Rumus Alkana",
+          q: "Rumus umum hidrokarbon alkana rantai terbuka (alifatik jenuh) adalah ...",
+          options: ["CnH2n+2", "CnH2n", "CnH2n-2", "CnH2n-4"],
+          correct: 0,
+          why: "Alkana adalah hidrokarbon jenuh dengan ikatan tunggal C-C berumus umum CnH2n+2."
+        },
+        {
+          id: "E06",
+          type: "mc",
+          levelLabel: "LOTS • Rumus Alkena",
+          q: "Rumus umum hidrokarbon alkena rantai terbuka dengan 1 ikatan rangkap dua (C=C) adalah ...",
+          options: ["CnH2n+2", "CnH2n", "CnH2n-2", "CnH2n-6"],
+          correct: 1,
+          why: "Adanya satu ikatan rangkap dua menyebabkan berkurangnya 2 atom H dari alkana menjadi CnH2n."
+        },
+        {
+          id: "E07",
+          type: "mc",
+          levelLabel: "LOTS • Rumus Alkuna",
+          q: "Rumus umum senyawa alkuna dengan 1 ikatan rangkap tiga (C≡C) adalah ...",
+          options: ["CnH2n+2", "CnH2n", "CnH2n-2", "CnHn"],
+          correct: 2,
+          why: "Satu ikatan rangkap tiga mengurangi 4 atom H dibanding alkana, sehingga rumusnya CnH2n-2."
+        },
+        {
+          id: "E08",
+          type: "mc",
+          levelLabel: "LOTS • Tata Nama",
+          q: "Nama IUPAC untuk senyawa alkana rantai lurus CH3-CH2-CH3 adalah ...",
+          options: ["Metana", "Etana", "Propana", "Butana"],
+          correct: 2,
+          why: "Senyawa berantai 3 atom karbon jenuh diberi nama propana."
+        },
+        {
+          id: "E09",
+          type: "mc",
+          levelLabel: "LOTS • Tata Nama",
+          q: "Senyawa alkena paling sederhana dengan struktur CH2=CH2 memiliki nama resmi ...",
+          options: ["Metena", "Etena", "Etuna", "Propena"],
+          correct: 1,
+          why: "Alkena dengan 2 atom karbon dinamakan etena (nama dagang: etilena)."
+        },
+        {
+          id: "E10",
+          type: "mc",
+          levelLabel: "LOTS • Tata Nama",
+          q: "Senyawa gas asetilena (gas karbit untuk pengelasan) dengan rumus HC≡CH memiliki nama IUPAC ...",
+          options: ["Etuna", "Etena", "Etana", "Propuna"],
+          correct: 0,
+          why: "Senyawa berikatan rangkap tiga dengan 2 karbon dinamai etuna."
+        },
+        {
+          id: "E11",
+          type: "mc",
+          levelLabel: "LOTS • Konsep Ikatan",
+          q: "Hidrokarbon yang seluruh ikatan antar atom karbonnya berupa ikatan tunggal (jenuh) dinamakan ...",
+          options: ["Alkana", "Alkena", "Alkuna", "Aromatik"],
+          correct: 0,
+          why: "Alkana disebut hidrokarbon jenuh karena hanya memiliki ikatan tunggal C-C."
+        },
+        {
+          id: "E12",
+          type: "mc",
+          levelLabel: "LOTS • Reaksi Alkana",
+          q: "Reaksi antara metana (CH4) dengan gas klorin (Cl2) dengan bantuan sinar ultraviolet (UV) merupakan reaksi ...",
+          options: ["Adisi", "Substitusi", "Eliminasi", "Kondensasi"],
+          correct: 1,
+          why: "Reaksi penggantian atom H pada alkana oleh halogen disebut reaksi substitusi radikal."
+        },
+        {
+          id: "E13",
+          type: "mc",
+          levelLabel: "LOTS • Reaksi Adisi",
+          q: "Reaksi pengubahan etena (CH2=CH2) menjadi etana (CH3-CH3) menggunakan gas hidrogen (H2) adalah contoh reaksi ...",
+          options: ["Adisi", "Substitusi", "Eliminasi", "Oksidasi"],
+          correct: 0,
+          why: "Penjenuhan ikatan rangkap melalui penambahan molekul H2 disebut reaksi adisi hidrogenasi."
+        },
+        {
+          id: "E14",
+          type: "mc",
+          levelLabel: "LOTS • Reaksi Alkena",
+          q: "Reaksi adisi pada senyawa alkena terjadi karena adanya ...",
+          options: ["Ikatan kovalen tunggal", "Ikatan pi (π) pada C=C", "Kepolaran atom hidrogen", "Gaya Van der Waals"],
+          correct: 1,
+          why: "Ikatan pi (π) pada ikatan rangkap dua relatif mudah diputus untuk mengikat pereaksi baru."
+        },
+        {
+          id: "E15",
+          type: "mc",
+          levelLabel: "LOTS • Reaksi Eliminasi",
+          q: "Reaksi pelepasan atom atau gugus molekul kecil untuk membentuk ikatan rangkap disebut ...",
+          options: ["Substitusi", "Adisi", "Eliminasi", "Netralisasi"],
+          correct: 2,
+          why: "Reaksi eliminasi adalah kebalikan dari adisi, yaitu membentuk ikatan rangkap baru."
+        },
+        {
+          id: "E16",
+          type: "mc",
+          levelLabel: "LOTS • Pembakaran",
+          q: "Pembakaran sempurna hidrokarbon dengan jumlah oksigen melimpah akan menghasilkan gas ...",
+          options: ["CO dan H2", "CO2 dan H2O", "C jelaga dan O2", "CO dan CO2"],
+          correct: 1,
+          why: "Pembakaran sempurna mengubah karbon menjadi CO2 dan hidrogen menjadi uap air (H2O)."
+        },
+        {
+          id: "E17",
+          type: "mc",
+          levelLabel: "LOTS • Struktur Alkana",
+          q: "Jumlah atom karbon pada senyawa hidrokarbon butana adalah ...",
+          options: ["2", "3", "4", "5"],
+          correct: 2,
+          why: "Awalan 'but-' menandakan rantai induk memiliki 4 atom karbon (C4H10)."
+        },
+        {
+          id: "E18",
+          type: "mc",
+          levelLabel: "LOTS • Penggolongan",
+          q: "Senyawa dengan rumus C4H8 yang memiliki satu ikatan rangkap dua tergolong ke dalam kelompok ...",
+          options: ["Alkana", "Alkena", "Alkuna", "Alkoksi"],
+          correct: 1,
+          why: "Sesuai rumus CnH2n untuk n=4 menghasilkan C4H8 yang merupakan alkena (butena)."
+        },
+        {
+          id: "E19",
+          type: "mc",
+          levelLabel: "LOTS • Penggolongan",
+          q: "Senyawa dengan rumus C5H8 yang memiliki satu ikatan rangkap tiga tergolong kelompok ...",
+          options: ["Alkana", "Alkena", "Alkuna", "Sikloalkana"],
+          correct: 2,
+          why: "Sesuai rumus CnH2n-2 untuk n=5 menghasilkan C5H8 yaitu pentuna (alkuna)."
+        },
+        {
+          id: "E20",
+          type: "mc",
+          levelLabel: "LOTS • Identifikasi Reaksi",
+          q: "Pada persamaan: CH4 + Cl2 → CH3Cl + HCl, reaksi tersebut tergolong ...",
+          options: ["Adisi", "Substitusi", "Eliminasi", "Polimerisasi"],
+          correct: 1,
+          why: "Satu atom H pada metana digantikan oleh atom klorin, membentuk klorometana."
+        }
+      ],
+
+      // 15 SOAL MENJODOHKAN (SEDANG)
+      medium: [
+        {
+          id: "M01",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Atom C Kuarterner",
+          correct: "Karbon yang terikat langsung pada 4 atom C lain",
+          distractors: ["Karbon yang terikat pada 1 atom C lain", "Karbon yang terikat pada 2 atom C lain", "Karbon yang memiliki ikatan rangkap tiga"],
+          why: "Atom C kuarterner adalah pusat percabangan yang mengikat 4 karbon tanpa mengikat atom H."
+        },
+        {
+          id: "M02",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Atom C Tersier",
+          correct: "Karbon yang terikat langsung pada 3 atom C lain",
+          distractors: ["Karbon pada ujung rantai lurus", "Karbon yang mengikat 4 atom hidrogen", "Karbon yang hanya mengikat 1 atom C"],
+          why: "Atom C tersier mengikat tiga karbon tetangga dan satu atom hidrogen."
+        },
+        {
+          id: "M03",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Senyawa Alkana",
+          correct: "Hidrokarbon jenuh dengan rumus umum CnH2n+2",
+          distractors: ["Hidrokarbon tak jenuh berikatan rangkap dua", "Hidrokarbon tak jenuh berikatan rangkap tiga", "Senyawa pembentuk cincin benzena"],
+          why: "Alkana merupakan hidrokarbon alifatik jenuh dengan rumus CnH2n+2."
+        },
+        {
+          id: "M04",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Senyawa Alkena",
+          correct: "Hidrokarbon tak jenuh yang memiliki ikatan C=C (CnH2n)",
+          distractors: ["Hidrokarbon jenuh ikatan tunggal", "Gas inert mulia", "Senyawa dengan ikatan C≡C"],
+          why: "Ciri khas alkena adalah keberadaan ikatan rangkap dua karbon-karbon."
+        },
+        {
+          id: "M05",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Senyawa Alkuna",
+          correct: "Hidrokarbon tak jenuh berikatan rangkap tiga (CnH2n-2)",
+          distractors: ["Senyawa hidrokarbon jenuh", "Alkana bercabang banyak", "Senyawa aldehida"],
+          why: "Ciri khas alkuna adalah ikatan rangkap tiga dengan rumus CnH2n-2."
+        },
+        {
+          id: "M06",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Reaksi Substitusi",
+          correct: "Penggantian suatu atom/gugus oleh atom/gugus lain",
+          distractors: ["Pemutusan ikatan rangkap menjadi ikatan tunggal", "Pembentukan ikatan rangkap dengan melepas molekul", "Penggabungan monomer"],
+          why: "Substitusi berarti pergantian (misal H diganti Cl)."
+        },
+        {
+          id: "M07",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Reaksi Adisi",
+          correct: "Penambahan molekul pada ikatan rangkap menjadikannya jenuh",
+          distractors: ["Pelepasan molekul kecil membentuk ikatan rangkap", "Pertukaran pasangan ion", "Penguraian senyawa oleh panas"],
+          why: "Adisi merupakan pemutusan ikatan rangkap untuk memasukkan atom baru."
+        },
+        {
+          id: "M08",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Reaksi Eliminasi",
+          correct: "Pelepasan gugus/molekul kecil menghasilkan ikatan rangkap",
+          distractors: ["Penambahan gas H2 pada ikatan rangkap", "Penggantian atom H dengan klorin", "Pemberian warna pada air bromin"],
+          why: "Eliminasi menghasilkan ikatan rangkap dengan melepaskan molekul seperti H2O atau HX."
+        },
+        {
+          id: "M09",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Aturan Markovnikov",
+          correct: "Atom H dari asam halida masuk ke atom C berikatan rangkap yang kaya H",
+          distractors: ["Atom halogen selalu masuk ke atom C ujung rantai", "Reaksi adisi selalu menghasilkan senyawa simetris", "Atom H masuk ke atom C yang tidak mengikat H"],
+          why: "Prinsip 'yang kaya H makin kaya': atom H terikat pada C ikatan rangkap yang mengikat atom H lebih banyak."
+        },
+        {
+          id: "M10",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Uji Air Bromin (Br2)",
+          correct: "Identifikasi ikatan rangkap melalui pemudaran warna cokelat",
+          distractors: ["Pengujian keasaman menggunakan kertas lakmus", "Uji keberadaan ion logam alkali", "Uji kadar garam dalam larutan"],
+          why: "Alkena/alkuna mengadisi Br2 sehingga warna merah-cokelat air bromin lenyap."
+        },
+        {
+          id: "M11",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Reaksi Hidrogenasi",
+          correct: "Adisi gas H2 pada alkena membentuk alkana (minyak jadi margarin)",
+          distractors: ["Pelepasan gas hidrogen dari senyawa alkana", "Reaksi pembakaran menghasilkan uap air", "Penguraian air menjadi H2 dan O2"],
+          why: "Hidrogenasi digunakan di industri untuk memadatkan minyak nabati menjadi margarin."
+        },
+        {
+          id: "M12",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Dehidrohalogenasi",
+          correct: "Eliminasi HX dari haloalkana dengan basa kuat (KOH alkohol)",
+          distractors: ["Adisi asam halida pada alkena", "Substitusi gugus alkohol oleh halogen", "Netralisasi asam basa"],
+          why: "Dehidrohalogenasi melepaskan H dan halogen menghasilkan alkena."
+        },
+        {
+          id: "M13",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Senyawa 2,2,4-Trimetilpentana",
+          correct: "Senyawa isooktana sebagai standar mutu nilai oktan 100",
+          distractors: ["Senyawa alkuna gas las karbit", "Polimer pembungkus makanan", "Pelarut cat kuku aseton"],
+          why: "2,2,4-trimetilpentana (isooktana) adalah acuan ketukan mesin bernilai oktan 100."
+        },
+        {
+          id: "M14",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Pembakaran Tidak Sempurna",
+          correct: "Reaksi dengan oksigen terbatas yang menghasilkan gas beracun CO",
+          distractors: ["Pembakaran yang menghasilkan uap air dan garam", "Pembakaran yang hanya menghasilkan CO2 bersih", "Reaksi pengkaratan besi"],
+          why: "Kekurangan oksigen menyebabkan sebagian karbon tidak teroksidasi penuh menjadi CO2 melainkan CO."
+        },
+        {
+          id: "M15",
+          type: "match",
+          levelLabel: "SEDANG • Menjodohkan",
+          term: "Isomer Rangka/Struktur",
+          correct: "Senyawa dengan rumus molekul sama tetapi susunan kerangka berbeda",
+          distractors: ["Senyawa dengan titik didih dan rumus molekul berbeda", "Senyawa yang tidak mengandung karbon sama sekali", "Zat yang memiliki rumus empiris berbeda"],
+          why: "Isomer memiliki rumus kimia sama (misal C4H10) namun struktur rantai berbeda (butana & 2-metilpropana)."
+        }
+      ],
+
+      // 15 SOAL ESAI HOTS (SULIT)
+      hard: [
+        {
+          id: "H01",
+          type: "essay",
+          levelLabel: "HOTS • Analisis Struktur",
+          q: "Jelaskan cara menentukan jumlah atom C primer, sekunder, tersier, dan kuarterner pada struktur 2,2,4-trimetilpentana!",
+          hint: "Fokus: Hitung tetangga karbon langsung pada rantai utama 5 karbon dan 3 gugus metil cabang.",
+          keywords: ["primer", "sekunder", "tersier", "kuarterner", "lima", "tiga", "karbon", "tetangga"],
+          modelAnswer: "Pada 2,2,4-trimetilpentana: C-2 adalah atom C kuarterner (mengikat 4 atom C); C-4 adalah atom C tersier (mengikat 3 atom C); C-3 adalah atom C sekunder (mengikat 2 atom C); dan terdapat 5 atom C primer (ujung-ujung -CH3 pada C-1, C-5, dan 3 cabang metil)."
+        },
+        {
+          id: "H02",
+          type: "essay",
+          levelLabel: "HOTS • Golongan Hidrokarbon",
+          q: "Sebuah sampel bahan bakar memiliki rumus molekul C6H14. Tentukan golongan hidrokarbon tersebut dan berikan alasan kuat berdasarkan rumus umumnya!",
+          hint: "Fokus: Uji dengan rumus CnH2n+2, CnH2n, atau CnH2n-2.",
+          keywords: ["alkana", "cnh2n+2", "jenuh", "enam", "tunggal", "14"],
+          modelAnswer: "Golongan alkana. Untuk jumlah n=6, rumus umum CnH2n+2 menghasilkan C6H(2x6+2) = C6H14. Ini membuktikan hidrokarbon alifatik jenuh dengan ikatan tunggal."
+        },
+        {
+          id: "H03",
+          type: "essay",
+          levelLabel: "HOTS • Uji Ketidakjenuhan",
+          q: "Mengapa gas etena dapat memudarkan warna merah-cokelat air bromin pada suhu ruang, sedangkan gas etana tidak bereaksi tanpa bantuan sinar UV?",
+          hint: "Fokus: Bandingkan ikatan pi (π) pada alkena dengan ikatan sigma jenuh pada alkana.",
+          keywords: ["ikatan pi", "rangkap", "adisi", "etena", "etana", "jenuh", "sigma", "bromin"],
+          modelAnswer: "Etena memiliki ikatan rangkap dua (C=C) dengan ikatan pi (π) yang lebih lemah sehingga mudah mengalami reaksi adisi dengan Br2 memutus ikatan rangkap dan memudarkan warna bromin. Sedangkan etana hanya memiliki ikatan tunggal sigma yang stabil dan hanya bereaksi substitusi jika ada sinar UV."
+        },
+        {
+          id: "H04",
+          type: "essay",
+          levelLabel: "HOTS • Aturan Markovnikov",
+          q: "Tentukan produk utama reaksi adisi antara asam bromida (HBr) dengan propena (CH3-CH=CH2) dan jelaskan dasar aturan Markovnikov yang berlaku!",
+          hint: "Fokus: Kemana atom H masuk dan kemana atom Br terikat.",
+          keywords: ["2-bromopropana", "markovnikov", "atom h", "lebih banyak", "sekunder", "karbokation"],
+          modelAnswer: "Produk utama adalah 2-bromopropana (CH3-CHBr-CH3). Menurut aturan Markovnikov, atom H akan terikat pada atom C ikatan rangkap yang mengikat atom H lebih banyak (C-1), sedangkan ion Br- terikat pada atom C yang mengikat H lebih sedikit (C-2)."
+        },
+        {
+          id: "H05",
+          type: "essay",
+          levelLabel: "HOTS • Reaksi Eliminasi",
+          q: "Jika 2-bromobutana dipanaskan bersama larutan KOH pekat dalam pelarut alkohol, prediksikan jenis reaksi dan sebutkan alkena produk mayoritasnya!",
+          hint: "Fokus: Eliminasi dehidrohalogenasi dan aturan Zaitsev.",
+          keywords: ["eliminasi", "dehidrohalogenasi", "2-butena", "but-2-ena", "zaitsev", "stabil"],
+          modelAnswer: "Terjadi reaksi eliminasi (dehidrohalogenasi). Produk mayoritasnya adalah 2-butena (but-2-ena) sesuai aturan Zaitsev, di mana ikatan rangkap terbentuk pada atom karbon yang lebih tersubstitusi karena lebih stabil dibanding 1-butena."
+        },
+        {
+          id: "H06",
+          type: "essay",
+          levelLabel: "HOTS • Kimia Industri",
+          q: "Jelaskan keterkaitan proses pembuatan margarin dari minyak nabati dengan konsep ikatan hidrokarbon dan jenis reaksi kimia yang berlangsung!",
+          hint: "Fokus: Asam lemak tak jenuh, hidrogenasi katalitik, titik leleh.",
+          keywords: ["hidrogenasi", "adisi", "rangkap", "jenuh", "padat", "katalis", "titik leleh"],
+          modelAnswer: "Minyak nabati cair mengandung ikatan rangkap C=C (asam lemak tak jenuh). Melalui reaksi adisi hidrogenasi dengan gas H2 dan katalis nikel, ikatan rangkap dijenuhkan menjadi ikatan tunggal sehingga struktur molekul lebih teratur, titik leleh naik, dan membeku menjadi margarin padat."
+        },
+        {
+          id: "H07",
+          type: "essay",
+          levelLabel: "HOTS • Analisis Isomer",
+          q: "Suatu hidrokarbon memiliki rumus molekul C5H8. Jelaskan mengapa rumus molekul tersebut belum cukup untuk memastikan apakah ia adalah alkuna atau senyawa lain!",
+          hint: "Fokus: Derajat ketidakjenuhan, alkuna, alkadiena, sikloalkena.",
+          keywords: ["alkuna", "sikloalkena", "alkadiena", "derajat", "isomer", "struktur", "rangkap"],
+          modelAnswer: "Karena rumus C5H8 memiliki derajat ketidakjenuhan 2 (sesuai CnH2n-2). Rumus ini dapat berupa alkuna rantai terbuka dengan 1 ikatan rangkap tiga, alkadiena dengan 2 ikatan rangkap dua, atau sikloalkena (senyawa cincin dengan ikatan rangkap dua). Diperlukan data uji struktur untuk memastikannya."
+        },
+        {
+          id: "H08",
+          type: "essay",
+          levelLabel: "HOTS • Evaluasi Konsep",
+          q: "Seorang siswa berpendapat: 'Semua senyawa dengan rumus molekul CnH2n pasti tergolong alkena'. Evaluasi apakah pernyataan tersebut benar atau salah, berikan penjelasannya!",
+          hint: "Fokus: Isomer fungsi antara alkena dan sikloalkana.",
+          keywords: ["salah", "sikloalkana", "cincin", "isomer", "jenuh", "cnh2n"],
+          modelAnswer: "Pernyataan tersebut SALAH. Rumus umum CnH2n selain dimiliki oleh alkena rantai terbuka dengan 1 ikatan rangkap dua, juga merupakan rumus umum untuk senyawa sikloalkana (alkana berbentuk cincin jenuh, misalnya siklobutana C4H8 atau sikloheksana C6H12)."
+        },
+        {
+          id: "H09",
+          type: "essay",
+          levelLabel: "HOTS • Reaksi Adisi vs Substitusi",
+          q: "Bandingkan secara mendasar perbedaan antara reaksi substitusi pada metana dan reaksi adisi pada etena ditinjau dari perubahan jumlah ikatan dan pereaksinya!",
+          hint: "Fokus: Pergantian atom vs pemutusan ikatan pi dan penambahan atom.",
+          keywords: ["substitusi", "adisi", "penggantian", "ikatan pi", "pemutusan", "jenuh", "terbuka"],
+          modelAnswer: "Pada substitusi (metana), atom H dilepas dan digantikan atom lain tanpa mengubah kejenuhan ikatan. Sedangkan pada adisi (etena), ikatan rangkap pi diputus menjadi ikatan tunggal sehingga dua atom baru langsung ditambahkan ke kedua atom karbon tanpa ada atom yang dilepaskan."
+        },
+        {
+          id: "H10",
+          type: "essay",
+          levelLabel: "HOTS • Dampak Lingkungan",
+          q: "Jelaskan mengapa pembakaran hidrokarbon pada mesin kendaraan bermotor yang kekurangan suplai udara (oksigen) dapat membahayakan kesehatan manusia!",
+          hint: "Fokus: Pembakaran tak sempurna, gas karbon monoksida (CO), pengikatan hemoglobin.",
+          keywords: ["karbon monoksida", "co", "hemoglobin", "oksigen", "racun", "tidak sempurna"],
+          modelAnswer: "Kekurangan oksigen menyebabkan pembakaran tidak sempurna yang menghasilkan gas karbon monoksida (CO). Gas CO berikatan sangat kuat dengan hemoglobin dalam darah (jauh lebih kuat daripada oksigen), menghambat pengangkutan oksigen ke otak dan jaringan tubuh sehingga dapat memicu pusing hingga kematian."
+        },
+        {
+          id: "H11",
+          type: "essay",
+          levelLabel: "HOTS • Sintesis Haloalkana",
+          q: "Senyawa haloalkana 2-kloropropana dapat disintesis dari reaksi alkena dengan asam klorida (HCl). Tentukan nama alkena awal yang digunakan dan tuliskan persamaan reaksinya!",
+          hint: "Fokus: Adisi propena dengan HCl.",
+          keywords: ["propena", "ch3-ch=ch2", "hcl", "2-kloropropana", "adisi"],
+          modelAnswer: "Alkena yang digunakan adalah propena (CH3-CH=CH2). Persamaan reaksinya: CH3-CH=CH2 + HCl → CH3-CH(Cl)-CH3 (2-kloropropana) melalui reaksi adisi elektrofilik sesuai aturan Markovnikov."
+        },
+        {
+          id: "H12",
+          type: "essay",
+          levelLabel: "HOTS • Rasionalisasi Reaktivitas",
+          q: "Urutkan tingkat reaktivitas kimia antara etana, etena, dan etuna terhadap reaksi adisi halogen, serta jelaskan alasannya!",
+          hint: "Fokus: Kerapatan elektron pada ikatan rangkap dua dan tiga.",
+          keywords: ["etuna", "etena", "etana", "kerapatan", "rangkap", "adisi", "pi"],
+          modelAnswer: "Etuna dan etena jauh lebih reaktif mengalami adisi dibanding etana. Hal ini karena adanya awan elektron ikatan pi (π) pada ikatan rangkap (dua ikatan pi pada etuna, satu pada etena) yang mudah diserang oleh elektrofil halogen, sedangkan etana hanya memiliki ikatan tunggal sigma yang sulit diserang."
+        },
+        {
+          id: "H13",
+          type: "essay",
+          levelLabel: "HOTS • Rancang Prosedur Lab",
+          q: "Di laboratorium kimia terdapat dua botol tanpa label: satu berisi heksana dan satu lagi heksena. Rancang uji kimia sederhana untuk membedakan isi kedua botol tersebut!",
+          hint: "Fokus: Uji air bromin (Br2) atau larutan kalium permanganat (KMnO4).",
+          keywords: ["air bromin", "br2", "pudar", "heksena", "heksana", "adisi", "kmno4"],
+          modelAnswer: "Ambil sedikit sampel dari kedua botol, lalu teteskan air bromin (Br2 encer) berwarna merah-cokelat di tempat teduh. Sampel yang menyebabkan warna bromin cepat memudar/hilang adalah heksena (karena terjadi adisi pada ikatan rangkap). Sedangkan sampel yang warnanya tetap cokelat adalah heksana."
+        },
+        {
+          id: "H14",
+          type: "essay",
+          levelLabel: "HOTS • Hubungan Deret Homolog",
+          q: "Bandingkan jumlah atom hidrogen pada molekul alkana, alkena, dan alkuna rantai lurus yang masing-masing tersusun atas 5 atom karbon. Tuliskan rumus molekul ketiganya!",
+          hint: "Fokus: Rumus CnH2n+2, CnH2n, dan CnH2n-2 untuk n=5.",
+          keywords: ["c5h12", "c5h10", "c5h8", "pentana", "pentena", "pentuna", "dua"],
+          modelAnswer: "Untuk 5 atom karbon: Alkana (pentana) = C5H12 (12 H); Alkena (pentena) = C5H10 (10 H); Alkuna (pentuna) = C5H8 (8 H). Setiap peningkatan derajat ketidakjenuhan ikatan (dari tunggal ke rangkap 2, lalu rangkap 3) selalu mengurangi 2 atom hidrogen."
+        },
+        {
+          id: "H15",
+          type: "essay",
+          levelLabel: "HOTS • Konsep Balikan Reaksi",
+          q: "Jelaskan mengapa reaksi eliminasi sering disebut sebagai 'kebalikan konseptual' dari reaksi adisi dalam kimia organik!",
+          hint: "Fokus: Perubahan dari ikatan tunggal ke rangkap dan pembentukan molekul kecil vs penggabungan molekul.",
+          keywords: ["kebalikan", "adisi", "eliminasi", "ikatan rangkap", "tunggal", "melepas", "menambah"],
+          modelAnswer: "Reaksi adisi mengubah ikatan tak jenuh (rangkap) menjadi ikatan jenuh (tunggal) dengan menambahkan atom/molekul baru ke dalam rantai karbon. Sebaliknya, eliminasi mengubah ikatan jenuh (tunggal) menjadi ikatan tak jenuh (rangkap) dengan cara melepaskan molekul kecil (seperti H2O atau HX) dari atom-atom karbon yang berdampingan."
+        }
+      ]
+    };
+
+    /* ==========================================
+       SOUND SYNTHESIZER (WEB AUDIO API)
+       Berfungsi 100% tanpa internet / file eksternal!
+       ========================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playCorrect() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        // Pleasant ascending major chime
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+        osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+        
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+        osc.start(now);
+        osc.stop(now + 0.55);
+      }
+      playWrong() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        // Low gentle buzz
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.28);
+        
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      }
+      playTug() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.15);
+        
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.start(now);
+        osc.stop(now + 0.2);
+      }
+      playLevelUp() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'square';
+        [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        });
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.start(now);
+        osc.stop(now + 0.45);
+      }
+      playVictory() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50, 880, 1046.50];
+        notes.forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.12);
+          gain.gain.setValueAtTime(0.2, now + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.35);
+          osc.start(now + i * 0.12);
+          osc.stop(now + i * 0.12 + 0.35);
+        });
+      }
+    }
+    const SFX = new SoundEngine();
+
+    /* ==========================================
+       TEXT TO SPEECH (ARDI / INDONESIAN VOICE)
+       ========================================== */
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      // Try to match Indonesian voice (like 'Ardi' or 'id-ID')
+      const idVoice = voices.find(v => v.lang.toLowerCase().includes('id') || v.name.toLowerCase().includes('indonesia') || v.name.toLowerCase().includes('ardi'));
+      if (idVoice) {
+        utterance.voice = idVoice;
+      }
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function readQuestionTTS() {
+      const q = state.questionsQueue[state.currentQuestionIndex];
+      if (!q) return;
+      let textToRead = q.q;
+      if (q.type === 'mc') {
+        textToRead += ". Pilihan jawaban: " + q.options.map((opt, i) => String.fromCharCode(65 + i) + ", " + opt).join(". ");
+      } else if (q.type === 'match') {
+        textToRead += ". Cocokkan istilah: " + q.term;
+      } else if (q.type === 'essay') {
+        textToRead += ". Petunjuk: " + q.hint;
+      }
+      speakText(textToRead);
+    }
+
+    function readReportTTS() {
+      const p1 = state.players[0];
+      const p2 = state.players[1];
+      const winnerText = document.getElementById('titleWinner').textContent;
+      const speech = `Rapor Hasil Pertandingan Tarik Tambang Kimia. ${p1.name} memperoleh ${p1.score} poin dengan ${p1.correct} jawaban benar. ${p2.name} memperoleh ${p2.score} poin dengan ${p2.correct} jawaban benar. ${winnerText}`;
+      speakText(speech);
+    }
+
+    /* ==========================================
+       BACKGROUND LOFI MUSIC CONTROLLER
+       ========================================== */
+    function toggleBackgroundMusic() {
+      const audio = document.getElementById('audioBackground');
+      const label = document.getElementById('musicLabel');
+      const icon = document.getElementById('musicIcon');
+
+      if (!state.musicPlaying) {
+        // High quality royalty-free study lofi music from Pixabay
+        audio.src = "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3";
+        audio.volume = 0.22;
+        audio.play().then(() => {
+          state.musicPlaying = true;
+          label.textContent = "Musik: ON";
+          icon.textContent = "🔊";
+        }).catch(() => {
+          // Fallback track
+          audio.src = "https://cdn.pixabay.com/audio/2022/10/25/audio_946b6b6e4c.mp3";
+          audio.play().then(() => {
+            state.musicPlaying = true;
+            label.textContent = "Musik: ON";
+            icon.textContent = "🔊";
+          }).catch(e => {
+            console.warn("Audio autoplay blocked by browser:", e);
+            alert("Sentuh layar sekali lagi untuk mengizinkan pemutaran musik.");
+          });
+        });
+      } else {
+        audio.pause();
+        state.musicPlaying = false;
+        label.textContent = "Musik: OFF";
+        icon.textContent = "🎵";
+      }
+    }
+
+    /* ==========================================
+       NAVIGATION & MODAL HELPERS
+       ========================================== */
+    function changeScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        state.screen = screenId;
+      }
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function goToDiagnostic() {
+      const p1Input = document.getElementById('inputP1Name').value.trim();
+      const p2Input = document.getElementById('inputP2Name').value.trim();
+      state.players[0].name = p1Input || "Pemain 1";
+      state.players[1].name = p2Input || "Pemain 2";
+      changeScreen('screenDiagnostic');
+    }
+
+    /* ==========================================
+       GAME INITIALIZATION & QUEUE BUILDER
+       ========================================== */
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startGameWithLevel(chosenLevel) {
+      SFX.init();
+      state.initialLevel = chosenLevel;
+      state.currentQuestionIndex = 0;
+      state.isGameOver = false;
+
+      // Reset players
+      state.players.forEach(p => {
+        p.score = 0;
+        p.combo = 0;
+        p.maxCombo = 0;
+        p.pulls = 0;
+        p.correct = 0;
+        p.wrong = 0;
+        p.fastAnswers = 0;
+        p.hotsCorrect = 0;
+        p.answered = false;
+        p.essayText = "";
+      });
+
+      // Prepare questions pool according to chosen diagnostic level
+      const shuffledEasy = shuffleArray(CHEMISTRY_DB.easy);
+      const shuffledMedium = shuffleArray(CHEMISTRY_DB.medium);
+      const shuffledHard = shuffleArray(CHEMISTRY_DB.hard);
+
+      if (chosenLevel === 'easy') {
+        state.currentLevelIndex = 0;
+        state.questionsQueue = [...shuffledEasy, ...shuffledMedium, ...shuffledHard];
+      } else if (chosenLevel === 'medium') {
+        state.currentLevelIndex = 1;
+        state.questionsQueue = [...shuffledMedium, ...shuffledEasy, ...shuffledHard];
+      } else {
+        state.currentLevelIndex = 2;
+        state.questionsQueue = [...shuffledHard, ...shuffledMedium, ...shuffledEasy];
+      }
+
+      // Update UI names
+      document.getElementById('labelP1Name').textContent = state.players[0].name;
+      document.getElementById('labelP2Name').textContent = state.players[1].name;
+
+      changeScreen('screenGame');
+      renderCurrentQuestion();
+    }
+
+    /* ==========================================
+       QUESTION RENDERING LOGIC
+       ========================================== */
+    function renderCurrentQuestion() {
+      if (state.currentQuestionIndex >= state.questionsQueue.length) {
+        triggerGameOver();
+        return;
+      }
+
+      const q = state.questionsQueue[state.currentQuestionIndex];
+      state.players.forEach(p => p.answered = false);
+
+      // Header labels
+      document.getElementById('labelQuestionProgress').textContent = `Soal ${state.currentQuestionIndex + 1} / ${state.questionsQueue.length}`;
+      document.getElementById('badgeQuestionLevel').textContent = q.levelLabel;
+      document.getElementById('textQuestionPrompt').textContent = q.q;
+      
+      const feedbackEl = document.getElementById('bannerFeedback');
+      feedbackEl.textContent = "";
+      feedbackEl.className = "text-xs sm:text-sm font-black min-h-6";
+
+      // Context / hint text
+      const contextEl = document.getElementById('textQuestionContext');
+      if (q.type === 'match') {
+        contextEl.textContent = `🔍 Cocokkan konsep/definisi yang tepat untuk: "${q.term}"`;
+      } else if (q.type === 'essay') {
+        contextEl.textContent = `💡 Petunjuk Penilaian: ${q.hint}`;
+      } else {
+        contextEl.textContent = `Pilih salah satu jawaban yang paling tepat.`;
+      }
+
+      // Prepare options for this question if match
+      if (q.type === 'match' && !q.shuffledOptions) {
+        q.shuffledOptions = shuffleArray([q.correct, ...q.distractors]);
+      }
+
+      // Render for Player 1 and Player 2
+      renderPlayerAnswerPanel(0, q);
+      renderPlayerAnswerPanel(1, q);
+
+      // Timer start
+      state.questionStartTime = Date.now();
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      state.timerInterval = setInterval(() => {
+        const elapsed = ((Date.now() - state.questionStartTime) / 1000).toFixed(1);
+        document.getElementById('labelTimer').textContent = `⏱ ${elapsed}s`;
+      }, 100);
+
+      updateStatsUI();
+    }
+
+    function renderPlayerAnswerPanel(playerIdx, q) {
+      const container = document.getElementById(playerIdx === 0 ? 'containerP1Answers' : 'containerP2Answers');
+      container.innerHTML = "";
+      const keySet = playerIdx === 0 ? KEY_MAPPINGS.player1 : KEY_MAPPINGS.player2;
+
+      if (q.type === 'mc' || q.type === 'match') {
+        const options = q.type === 'mc' ? q.options : q.shuffledOptions;
+        
+        options.forEach((optText, optIdx) => {
+          const btn = document.createElement('button');
+          btn.className = "answer-card p-2.5 sm:p-3 text-left text-xs sm:text-sm text-slate-800";
+          btn.id = `btn_p${playerIdx}_opt${optIdx}`;
+          
+          btn.innerHTML = `
+            <span class="key-badge flex-shrink-0">${keySet[optIdx].toUpperCase()}</span>
+            <span class="flex-1 font-bold leading-tight">${optText}</span>
+          `;
+
+          btn.onclick = () => handlePlayerAnswer(playerIdx, optIdx);
+          container.appendChild(btn);
+        });
+
+      } else if (q.type === 'essay') {
+        // Essay Answer Box for each player
+        const wrapper = document.createElement('div');
+        wrapper.className = "flex flex-col gap-2 h-full justify-between";
+
+        const textarea = document.createElement('textarea');
+        textarea.id = `essay_p${playerIdx}`;
+        textarea.className = "w-full p-2.5 text-xs sm:text-sm font-bold border-2 border-slate-300 rounded-xl focus:outline-none focus:border-sky-500 bg-white resize-none flex-1";
+        textarea.placeholder = `Tuliskan jawaban analitis ${state.players[playerIdx].name}...`;
+        
+        // Submit Button
+        const submitBtn = document.createElement('button');
+        submitBtn.className = `btn-3d ${playerIdx === 0 ? 'btn-blue' : 'btn-red'} text-xs sm:text-sm py-2 flex items-center justify-center gap-1.5`;
+        submitBtn.innerHTML = `<span>📤</span> Kirim Jawaban (Tekan ${keySet[0].toUpperCase()})`;
+        submitBtn.onclick = () => handlePlayerAnswer(playerIdx, textarea.value);
+
+        wrapper.appendChild(textarea);
+        wrapper.appendChild(submitBtn);
+        container.appendChild(wrapper);
+      }
+    }
+
+    /* ==========================================
+       ANSWER HANDLING, ADAPTIVE & SCORING LOGIC
+       ========================================== */
+    function handlePlayerAnswer(playerIdx, rawValue) {
+      const p = state.players[playerIdx];
+      const q = state.questionsQueue[state.currentQuestionIndex];
+      if (p.answered || state.isGameOver) return;
+
+      p.answered = true;
+      const elapsedSeconds = (Date.now() - state.questionStartTime) / 1000;
+      let isCorrect = false;
+
+      if (q.type === 'mc') {
+        isCorrect = (Number(rawValue) === q.correct);
+      } else if (q.type === 'match') {
+        isCorrect = (q.shuffledOptions[Number(rawValue)] === q.correct);
+      } else if (q.type === 'essay') {
+        p.essayText = String(rawValue || "").trim();
+        const normalized = p.essayText.toLowerCase().replace(/[^a-z0-9]/g, ' ');
+        // Check keywords
+        const matchedKeywords = q.keywords.filter(kw => normalized.includes(kw.toLowerCase()));
+        // Consider correct if meets keyword criteria or thorough reasoning
+        isCorrect = (matchedKeywords.length >= 2) || (normalized.length > 35 && matchedKeywords.length >= 1);
+      }
+
+      // Visual feedback banner
+      const feedbackEl = document.getElementById('bannerFeedback');
+
+      if (isCorrect) {
+        SFX.playCorrect();
+        p.correct++;
+        p.combo++;
+        if (p.combo > p.maxCombo) p.maxCombo = p.combo;
+        if (q.type === 'essay') p.hotsCorrect++;
+
+        // Calculate score: Base (+50) + Speed (+10 to +30) + Combo (+20 if combo >= 2)
+        const speedBonus = Math.max(10, Math.min(30, Math.round(30 - elapsedSeconds * 2)));
+        if (speedBonus >= 20) p.fastAnswers++;
+        const comboBonus = (p.combo >= 2) ? 20 : 0;
+        const totalAwarded = 50 + speedBonus + comboBonus;
+        p.score += totalAwarded;
+
+        // Move Tug of War
+        p.pulls = Math.min(10, p.pulls + 1);
+        SFX.playTug();
+
+        feedbackEl.textContent = `✨ TEPAT! ${p.name} menjawab benar (+${totalAwarded} poin) & menarik tali! ${q.why || ''}`;
+        feedbackEl.className = "text-xs sm:text-sm font-black min-h-6 text-emerald-700 animate-pulse";
+
+        // Check for Adaptive Boost: 2 consecutive correct answers elevate difficulty
+        if (p.combo === 2 && state.currentLevelIndex < 2) {
+          triggerAdaptiveDifficultyBoost(p.name);
+        }
+
+      } else {
+        SFX.playWrong();
+        p.wrong++;
+        p.combo = 0; // reset combo
+
+        // Shake the player's panel
+        const panel = document.getElementById(playerIdx === 0 ? 'panelP1' : 'panelP2');
+        panel.classList.add('shake-side');
+        setTimeout(() => panel.classList.remove('shake-side'), 400);
+
+        feedbackEl.textContent = `❌ Belum tepat! ${p.name} kehilangan combo. Kunci: ${q.why || q.modelAnswer || 'Perhatikan konsepnya kembali!'}`;
+        feedbackEl.className = "text-xs sm:text-sm font-black min-h-6 text-rose-700";
+      }
+
+      // Disable buttons for answered player
+      const container = document.getElementById(playerIdx === 0 ? 'containerP1Answers' : 'containerP2Answers');
+      container.querySelectorAll('button, textarea').forEach(el => el.disabled = true);
+
+      updateStatsUI();
+
+      // Check KO condition (10 pulls reached)
+      if (p.pulls >= 10) {
+        setTimeout(triggerGameOver, 600);
+        return;
+      }
+
+      // If both players have answered, proceed to next question
+      if (state.players.every(pl => pl.answered)) {
+        setTimeout(() => {
+          state.currentQuestionIndex++;
+          renderCurrentQuestion();
+        }, q.type === 'essay' ? 2000 : 1200);
+      }
+    }
+
+    /* ==========================================
+       ADAPTIVE DIFFICULTY BOOST NOTIFIER
+       ========================================== */
+    function triggerAdaptiveDifficultyBoost(playerName) {
+      SFX.playLevelUp();
+      state.currentLevelIndex++;
+      const nextLevelName = state.currentLevelIndex === 1 ? "SEDANG (Menjodohkan)" : "SULIT (Esai HOTS)";
+      
+      const banner = document.getElementById('bannerFeedback');
+      banner.textContent = `🔥 COMBO TERCAPAI OLEH ${playerName}! Sistem menaikkan level soal ke: ${nextLevelName}!`;
+      banner.className = "text-xs sm:text-sm font-black min-h-6 text-amber-700 font-brand";
+    }
+
+    /* ==========================================
+       UI STATS & ROPE UPDATE
+       ========================================== */
+    function updateStatsUI() {
+      const [p1, p2] = state.players;
+      
+      document.getElementById('labelP1Score').textContent = `${p1.score} Poin`;
+      document.getElementById('labelP1Combo').textContent = p1.combo;
+      document.getElementById('labelP1Pull').textContent = p1.pulls;
+      document.getElementById('statusPullP1').textContent = `${p1.pulls} Tarikan`;
+
+      document.getElementById('labelP2Score').textContent = `${p2.score} Poin`;
+      document.getElementById('labelP2Combo').textContent = p2.combo;
+      document.getElementById('labelP2Pull').textContent = p2.pulls;
+      document.getElementById('statusPullP2').textContent = `${p2.pulls} Tarikan`;
+
+      // Update flag position on rope (0 is center at 50%, delta moves flag left or right)
+      const diff = p1.pulls - p2.pulls; // positive moves left towards P1, negative moves right towards P2
+      // Clamp between 8% and 92%
+      const leftPercent = Math.max(8, Math.min(92, 50 - (diff * 4.2)));
+      document.getElementById('ropeFlag').style.left = `${leftPercent}%`;
+    }
+
+    /* ==========================================
+       KEYBOARD SHORTCUT LISTENER
+       ========================================== */
+    document.addEventListener('keydown', (e) => {
+      if (state.screen !== 'screenGame') return;
+      const key = e.key.toLowerCase();
+      const q = state.questionsQueue[state.currentQuestionIndex];
+      if (!q) return;
+
+      // Player 1 Keys: A, S, D, F
+      const p1Idx = KEY_MAPPINGS.player1.indexOf(key);
+      if (p1Idx >= 0) {
+        if (q.type === 'essay') {
+          if (p1Idx === 0) { // 'a' to submit
+            const val = document.getElementById('essay_p0')?.value || "";
+            handlePlayerAnswer(0, val);
+          }
+        } else {
+          handlePlayerAnswer(0, p1Idx);
+        }
+      }
+
+      // Player 2 Keys: H, J, K, L
+      const p2Idx = KEY_MAPPINGS.player2.indexOf(key);
+      if (p2Idx >= 0) {
+        if (q.type === 'essay') {
+          if (p2Idx === 0) { // 'h' to submit
+            const val = document.getElementById('essay_p1')?.value || "";
+            handlePlayerAnswer(1, val);
+          }
+        } else {
+          handlePlayerAnswer(1, p2Idx);
+        }
+      }
+    });
+
+    /* ==========================================
+       GAME OVER & REPORT CALCULATION
+       ========================================== */
+    function triggerGameOver() {
+      if (state.isGameOver) return;
+      state.isGameOver = true;
+      if (state.timerInterval) clearInterval(state.timerInterval);
+      SFX.playVictory();
+
+      const [p1, p2] = state.players;
+      let winnerText = "";
+      let winnerName = "";
+
+      if (p1.pulls >= 10 && p2.pulls < 10) {
+        winnerName = p1.name;
+        winnerText = `🏆 ${p1.name} (Tim Biru) MENANG MUTLAK DENGAN 10 TARIKAN!`;
+      } else if (p2.pulls >= 10 && p1.pulls < 10) {
+        winnerName = p2.name;
+        winnerText = `🏆 ${p2.name} (Tim Merah) MENANG MUTLAK DENGAN 10 TARIKAN!`;
+      } else {
+        if (p1.score > p2.score) {
+          winnerName = p1.name;
+          winnerText = `🏆 ${p1.name} (Tim Biru) MENANG DENGAN POIN TERTINGGI!`;
+        } else if (p2.score > p1.score) {
+          winnerName = p2.name;
+          winnerText = `🏆 ${p2.name} (Tim Merah) MENANG DENGAN POIN TERTINGGI!`;
+        } else {
+          winnerName = "Seri";
+          winnerText = `🤝 PERTANDINGAN BERAKHIR SERI!`;
+        }
+      }
+
+      document.getElementById('titleWinner').textContent = winnerText;
+      document.getElementById('descWinner').textContent = `Total Skor: ${p1.name} (${p1.score} Poin) VS ${p2.name} (${p2.score} Poin)`;
+
+      // Detailed Reports
+      document.getElementById('finalP1Title').textContent = `🔵 ${p1.name}`;
+      document.getElementById('finalP1Score').textContent = `${p1.score} Pts`;
+      document.getElementById('finalP1Details').innerHTML = `
+        <div>✔️ Jawaban Benar: <strong>${p1.correct}</strong> soal</div>
+        <div>⚡ Kecepatan Tinggi: <strong>${p1.fastAnswers}</strong> kali</div>
+        <div>🔥 Combo Terpanjang: <strong>${p1.maxCombo}</strong> beruntun</div>
+        <div>🏋️ Total Tarikan: <strong>${p1.pulls}</strong> / 10</div>
+      `;
+
+      document.getElementById('finalP2Title').textContent = `🔴 ${p2.name}`;
+      document.getElementById('finalP2Score').textContent = `${p2.score} Pts`;
+      document.getElementById('finalP2Details').innerHTML = `
+        <div>✔️ Jawaban Benar: <strong>${p2.correct}</strong> soal</div>
+        <div>⚡ Kecepatan Tinggi: <strong>${p2.fastAnswers}</strong> kali</div>
+        <div>🔥 Combo Terpanjang: <strong>${p2.maxCombo}</strong> beruntun</div>
+        <div>🏋️ Total Tarikan: <strong>${p2.pulls}</strong> / 10</div>
+      `;
+
+      // Digital Badges Calculation
+      const badges = [];
+      badges.push({ name: "Badge Pemula", icon: "🌱", desc: "Menyelesaikan tantangan Tarik Tambang Kimia." });
+
+      const highestScorePlayer = p1.score >= p2.score ? p1 : p2;
+      badges.push({ name: `Badge Bintang (${highestScorePlayer.name})`, icon: "⭐", desc: "Peraih akurasi & skor tertinggi." });
+
+      if (Math.abs(p1.score - p2.score) <= 90) {
+        badges.push({ name: "Badge Kolaborator", icon: "🤝", desc: "Skor kedua tim sangat seimbang dan kompetitif." });
+      }
+
+      if (p1.hotsCorrect > 0 || p2.hotsCorrect > 0) {
+        badges.push({ name: "Badge Inovator", icon: "💡", desc: "Berhasil memecahkan soal analitis kategori HOTS." });
+      }
+
+      const badgesContainer = document.getElementById('containerBadges');
+      badgesContainer.innerHTML = badges.map(b => `
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 border border-amber-300 rounded-full font-black text-amber-900 text-xs shadow-sm">
+          <span>${b.icon}</span> <span>${b.name}</span>
+        </span>
+      `).join("");
+
+      changeScreen('screenGameOver');
+      launchConfetti();
+      readReportTTS();
+    }
+
+    function restartGame() {
+      changeScreen('screenOnboarding');
+    }
+
+    /* ==========================================
+       CONFETTI CANVAS ANIMATION
+       ========================================== */
+    function launchConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        size: Math.random() * 8 + 4,
+        speedY: Math.random() * 4 + 2,
+        speedX: Math.random() * 3 - 1.5,
+        color: ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'][Math.floor(Math.random() * 6)],
+        rotation: Math.random() * 360,
+        rotationSpeed: Math.random() * 4 - 2
+      }));
+
+      let frameCount = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.rotation += p.rotationSpeed;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 1.4);
+          ctx.restore();
+        });
+
+        frameCount++;
+        if (frameCount < 240) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+
+    /* ==========================================
+       HIGH RESOLUTION A4 CERTIFICATE GENERATOR (PNG)
+       Resolusi Cetak Standar A4 Landscape (3508 x 2480 px)
+       ========================================== */
+    function downloadCertificateA4() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 3508;
+      canvas.height = 2480;
+      const ctx = canvas.getContext('2d');
+
+      const [p1, p2] = state.players;
+      let winnerName = (p1.score > p2.score) ? p1.name : (p2.score > p1.score ? p2.name : `${p1.name} & ${p2.name}`);
+
+      // Background Luxury Parchment
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#fefdfa');
+      grad.addColorStop(0.5, '#fffbeb');
+      grad.addColorStop(1, '#fef3c7');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Ornate Outer Gold & Blue Borders
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 28;
+      ctx.strokeRect(90, 90, canvas.width - 180, canvas.height - 180);
+
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(125, 125, canvas.width - 250, canvas.height - 250);
+
+      // Corner Badges / Ribbons
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 65px "Fredoka One", Georgia';
+      ctx.fillText('⭐', 180, 220);
+      ctx.fillText('⭐', canvas.width - 240, 220);
+      ctx.fillText('⭐', 180, canvas.height - 180);
+      ctx.fillText('⭐', canvas.width - 240, canvas.height - 180);
+
+      // Certificate Title
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = 'bold 150px "Fredoka One", Georgia';
+      ctx.fillText('SERTIFIKAT PENGHARGAAN', canvas.width / 2, 540);
+
+      ctx.fillStyle = '#b45309';
+      ctx.font = 'bold 95px "Nunito", sans-serif';
+      ctx.fillText('TARIK TAMBANG KIMIA • KELAS XII SMA', canvas.width / 2, 690);
+
+      ctx.fillStyle = '#475569';
+      ctx.font = '65px "Nunito", sans-serif';
+      ctx.fillText('Dengan bangga sertifikat ini dianugerahkan kepada:', canvas.width / 2, 920);
+
+      // Winner Name Banner
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = 'bold 160px "Fredoka One", Georgia';
+      ctx.fillText(winnerName.toUpperCase(), canvas.width / 2, 1160);
+
+      // Underline Ribbon
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 600, 1220);
+      ctx.lineTo(canvas.width / 2 + 600, 1220);
+      ctx.stroke();
+
+      // Description Text
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 65px "Nunito", sans-serif';
+      ctx.fillText('Atas pencapaian gemilang, pemahaman konsep mendalam, dan kecepatan analitis', canvas.width / 2, 1370);
+      ctx.fillText('dalam menguasai materi Hidrokarbon (Atom C, Alkana, Alkena, Alkuna, & Reaksi Organik).', canvas.width / 2, 1470);
+
+      // Match Result Summary Box
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 4;
+      ctx.roundRect ? ctx.roundRect(canvas.width / 2 - 800, 1580, 1600, 260, 30) : ctx.rect(canvas.width / 2 - 800, 1580, 1600, 260);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = 'bold 55px "Nunito", sans-serif';
+      ctx.fillText(`Hasil Akhir: ${p1.name} (${p1.score} Poin)  —  ${p2.name} (${p2.score} Poin)`, canvas.width / 2, 1700);
+      ctx.fillStyle = '#475569';
+      ctx.font = '45px "Nunito", sans-serif';
+      ctx.fillText(`Tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} • Lokasi: Laboratorium Kimia SMA`, canvas.width / 2, 1780);
+
+      // Signatures
+      ctx.fillStyle = '#334155';
+      ctx.font = 'bold 55px "Nunito", sans-serif';
+      ctx.fillText('Guru Pengampu Kimia,', canvas.width / 2 - 700, 2050);
+      ctx.fillText('Yudiasandi Anna, S.Pd.', canvas.width / 2 - 700, 2220);
+      ctx.font = '40px "Nunito", sans-serif';
+      ctx.fillText('NIP. 19850101 201001 1 001', canvas.width / 2 - 700, 2280);
+
+      ctx.font = 'bold 55px "Nunito", sans-serif';
+      ctx.fillText('Kepala Laboratorium,', canvas.width / 2 + 700, 2050);
+      ctx.fillText('Tim Pengembang Game Kimia', canvas.width / 2 + 700, 2220);
+      ctx.font = '40px "Nunito", sans-serif';
+      ctx.fillText('Advanced Chemistry Education', canvas.width / 2 + 700, 2280);
+
+      // Footer
+      ctx.fillStyle = '#64748b';
+      ctx.font = 'italic 40px "Nunito", sans-serif';
+      ctx.fillText('Created by: Yudiasandi Anna • Game Edukasi Tarik Tambang Kimia', canvas.width / 2, 2370);
+
+      // Trigger Download
+      const link = document.createElement('a');
+      link.download = `Sertifikat-Kimia-${winnerName.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    /* ==========================================
+       DATA SAVING: SUPABASE & GOOGLE SPREADSHEETS
+       ========================================== */
+    async function saveGameData() {
+      const statusEl = document.getElementById('labelSaveStatus');
+      const saveBtn = document.getElementById('btnSaveData');
+      saveBtn.disabled = true;
+      statusEl.textContent = "Sedang menyimpan data ke Supabase & Google Spreadsheet...";
+
+      const [p1, p2] = state.players;
+      const reflectionText = document.getElementById('inputReflection').value.trim() || "Tidak ada refleksi tertulis.";
+      const winnerTitle = document.getElementById('titleWinner').textContent;
+
+      const payload = {
+        player1: p1.name,
+        score1: p1.score,
+        correct1: p1.correct,
+        pull1: p1.pulls,
+        player2: p2.name,
+        score2: p2.score,
+        correct2: p2.correct,
+        pull2: p2.pulls,
+        level: state.initialLevel,
+        winner: winnerTitle,
+        reflection: reflectionText,
+        created_at: new Date().toISOString()
+      };
+
+      let supabaseSuccess = false;
+      let sheetsSuccess = false;
+
+      // 1. Save to Supabase via REST API
+      try {
+        const supabaseResp = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/game_results`, {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_CONFIG.key,
+            "Authorization": `Bearer ${SUPABASE_CONFIG.key}`,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (supabaseResp.ok || supabaseResp.status === 201) {
+          supabaseSuccess = true;
+        } else {
+          console.warn("Supabase response status:", supabaseResp.status);
+        }
+      } catch (err) {
+        console.warn("Supabase save error:", err);
+      }
+
+      // 2. Save to Google Apps Script (if configured)
+      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "URL_WEB_APP_ANDA") {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          sheetsSuccess = true;
+        } catch (err) {
+          console.warn("Google Sheet error:", err);
+        }
+      }
+
+      saveBtn.disabled = false;
+
+      if (supabaseSuccess || sheetsSuccess) {
+        let msg = "✅ Data berhasil disimpan! ";
+        if (supabaseSuccess) msg += "[Supabase Cloud ✓] ";
+        if (sheetsSuccess) msg += "[Google Sheets ✓]";
+        statusEl.textContent = msg;
+        statusEl.className = "text-xs font-black min-h-4 text-emerald-700";
+      } else {
+        statusEl.textContent = "ℹ️ Data siap disimpan. (Jika tabel Supabase belum dibuat, jalankan SQL migration pada panel Supabase).";
+        statusEl.className = "text-xs font-black min-h-4 text-amber-700";
+      }
+    }
+  </script>
+</body>
+</html>
